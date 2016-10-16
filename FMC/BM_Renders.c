@@ -3,7 +3,7 @@
 //=========================================================================
 // Macros
 //=========================================================================
-#define RENDER_IMG(IMG,X) (al_draw_bitmap( BM_VETOR_SPRITES[(IMG)]->Imagem, (X), (Y), 0))
+#define RENDER_IMG(IMG,X,Y,FLAG) (al_draw_bitmap( BM_VETOR_SPRITES[(IMG)]->Imagem, (X), (Y), (FLAG)))
 #define RENDER_REGION(IMG,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region(BM_VETOR_SPRITES[(IMG)]->Imagem,(SX),(SY),(SW),(SH),(DX),(DY),(F)))
 //=========================================================================
 
@@ -18,7 +18,7 @@ void BM_Render_exagono(BM_Hexagono _hexagono);
 // Loop de renderização principal
 //==========================================================================
 void BM_Render_principal() {
-	al_draw_bitmap(BM_VETOR_SPRITES[BM_IMG_MAPA_01]->Imagem, 0, 0, 0);
+	RENDER_IMG(BM_IMG_MAPA_01, 0, 0, 0);
 	BM_Render_campo();
 	al_flip_display();
 }
@@ -33,7 +33,6 @@ void BM_Render_campo() {
 	for (i = 0; i < campo->quantidade; i++) {
 		BM_Render_exagono(campo->hexagonos[i]);
 	}
-	al_flip_display();
 }
 //==========================================================================
 

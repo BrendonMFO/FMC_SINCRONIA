@@ -56,9 +56,9 @@ void BM_Loop(ALLEGRO_DISPLAY *_janela) {
 			BM_Loop_finalizar = TRUE;
 		BM_Render_principal();
 		BM_Loop_frame++;
-		if (BM_Loop_limitado && (BM_obterTempoTimer() < 1.0 / 30))
+		if (BM_Loop_limitado && (BM_obterTempoTimer() < 1.0 / FPS))
 		{
-			al_rest((1.0 / 30) - BM_obterTempoTimer());
+			al_rest((1.0 / FPS) - BM_obterTempoTimer());
 		}
 	}
 }
