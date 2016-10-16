@@ -3,10 +3,25 @@
 #include <stdio.h>
 
 //==========================================================================
+// Variaveis globais com os recursos disponiveis
+//==========================================================================
+BM_SPRITES *BM_VETOR_SPRITES[QUANTIDADE_SPRITES];
+//==========================================================================
+
+//==========================================================================
 // Prototipos
 //==========================================================================
 BM_SPRITES *carregar_sprite(char *_arquivo, int _framesLinhas, int _framesColunas);
 int checarArquivos();
+//==========================================================================
+
+//==========================================================================
+// Obter array com os recursos visuais carregados
+//==========================================================================
+BM_SPRITES * BM_Recursos_array()
+{
+	return BM_VETOR_SPRITES;
+}
 //==========================================================================
 
 //==========================================================================
@@ -16,6 +31,7 @@ int BM_Recursos_carregar_Sprites()
 {
 	BM_VETOR_SPRITES[0] = carregar_sprite("Mapa_01.bmp", 1, 1);
 	BM_VETOR_SPRITES[1] = carregar_sprite("Hexagono_1.png", 7, 3);
+	BM_VETOR_SPRITES[2] = carregar_sprite("Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
 	return checarArquivos();
 }
 //==========================================================================

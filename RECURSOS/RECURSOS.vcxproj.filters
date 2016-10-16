@@ -24,12 +24,18 @@
     <ClInclude Include="BM_Recursos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BM_Animacao.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Recursos_Sprites.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BM_Recursos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BM_Animacao.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

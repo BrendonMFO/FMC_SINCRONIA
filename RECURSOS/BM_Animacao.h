@@ -3,22 +3,26 @@
 #include "BM_Recursos_Sprites.h"
 
 //==========================================================================
-// Constantes
+// Lista de animações pendentes
 //==========================================================================
-#define ERRO 0
-#define SUCESSO 1
-#define QUANTIDADE_SPRITES 3
-#define SPRITES BM_Recursos_array()
-//==========================================================================
-
-//==========================================================================
-// Obter array com os recursos visuais carregados
-//==========================================================================
-BM_SPRITES *BM_Recursos_array();
+typedef struct BM_ANIMACAO_LISTA_S
+{
+	struct BM_ANIMACAO_LISTA_S *anterior;
+	BM_SPRITES *sprite;
+	int renderX;
+	int renderY;
+	struct BM_ANIMACAO_LISTA_S *proximo;
+}BM_ANIMACAO_LISTA_S;
 //==========================================================================
 
 //==========================================================================
-// Carregar Sprites
+// Adicionar animação
 //==========================================================================
-int BM_Recursos_carregar_Sprites();
+int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY);
+//==========================================================================
+
+//==========================================================================
+// Remover animação
+//==========================================================================
+void BM_Animacao_remover(int _posicao);
 //==========================================================================
