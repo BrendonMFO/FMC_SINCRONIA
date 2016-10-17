@@ -35,7 +35,7 @@ void BM_Loop_iniciarTimer()
 //==========================================================================
 
 //==========================================================================
-// Obter tempo decorrido desde o inicio da aplicação 5 x 5 = 25 em 5 segundos
+// Obter tempo decorrido desde o inicio da aplicação 
 //==========================================================================
 double BM_obterTempoTimer()
 {

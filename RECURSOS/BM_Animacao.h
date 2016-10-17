@@ -3,16 +3,39 @@
 #include "BM_Recursos_Sprites.h"
 
 //==========================================================================
-// Lista de animações pendentes
+// Constantes
 //==========================================================================
-typedef struct BM_ANIMACAO_LISTA_S
+#define ERRO 0
+#define SUCESSO 1
+//==========================================================================
+
+//==========================================================================
+// Estrutura de dados das animações pendentes
+//==========================================================================
+typedef struct BM_ANIMACAO_S
 {
-	struct BM_ANIMACAO_LISTA_S *anterior;
 	BM_SPRITES *sprite;
 	int renderX;
 	int renderY;
-	struct BM_ANIMACAO_LISTA_S *proximo;
-}BM_ANIMACAO_LISTA_S;
+	struct BM_ANIMACAO_S *anterior;
+	struct BM_ANIMACAO_S *proximo;
+}BM_ANIMACAO;
+//==========================================================================
+
+//==========================================================================
+// Lista de animações pendentes
+//==========================================================================
+typedef struct BM_ANIMACAO_FILA_S
+{
+	BM_ANIMACAO *inicio;
+	BM_ANIMACAO *fim;
+}BM_ANIMACAO_FILA;
+//==========================================================================
+
+//==========================================================================
+// Iniciar fila
+//==========================================================================
+int BM_Animacao_iniciar_fila();
 //==========================================================================
 
 //==========================================================================
@@ -24,5 +47,5 @@ int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY);
 //==========================================================================
 // Remover animação
 //==========================================================================
-void BM_Animacao_remover(int _posicao);
+void BM_Animacao_remover(BM_ANIMACAO *_animacao);
 //==========================================================================

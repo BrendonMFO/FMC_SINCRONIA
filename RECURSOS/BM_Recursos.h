@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BM_Recursos_Sprites.h"
+#include "BM_Animacao.h"
 
 //==========================================================================
 // Constantes

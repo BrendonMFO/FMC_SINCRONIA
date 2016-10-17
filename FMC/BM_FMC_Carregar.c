@@ -11,13 +11,10 @@ int BM_FMC_carregar_campo();
 // Carregar dados
 //==========================================================================
 int BM_FMC_carregar() {
-	if (BM_FMC_carregar_recursos() == ERRO)
-		return ERRO;
-	if (BM_FMC_carregar_campo() == ERRO)
-		return ERRO;
-	if (BM_Player_iniciar(0, BM_Campo_getCampo()->quantidade - 1) == ERRO)
-		return ERRO;
-	return SUCESSO;
+	return
+		BM_FMC_carregar_recursos() &&
+		BM_FMC_carregar_campo() &&
+		BM_Player_iniciar(0, BM_Campo_getCampo()->quantidade - 1);
 }
 //==========================================================================
 
@@ -25,13 +22,10 @@ int BM_FMC_carregar() {
 // Carregar Recursos
 //==========================================================================
 int BM_FMC_carregar_recursos() {
-	if (BM_Allegro_iniciar() == ERRO) {
-		return ERRO;
-	}
-	if (BM_Recursos_carregar_Sprites() == ERRO) {
-		return ERRO;
-	}
-	return SUCESSO;
+	return 
+		BM_Allegro_iniciar() &&
+		BM_Recursos_carregar_Sprites() &&
+		BM_Animacao_iniciar_fila();
 }
 //==========================================================================
 
