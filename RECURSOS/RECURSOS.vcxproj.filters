@@ -24,7 +24,7 @@
     <ClInclude Include="BM_Recursos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BM_Animacao.h">
+    <ClInclude Include="BM_Recursos_Animacao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="BM_Recursos.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BM_Animacao.c">
+    <ClCompile Include="BM_Recursos_Animacao.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

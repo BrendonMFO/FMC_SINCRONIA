@@ -18,9 +18,9 @@ int checarArquivos();
 //==========================================================================
 // Obter array com os recursos visuais carregados
 //==========================================================================
-BM_SPRITES * BM_Recursos_array()
+BM_SPRITES *BM_Recursos_obter_recurso(int _indice)
 {
-	return BM_VETOR_SPRITES;
+	return BM_VETOR_SPRITES[_indice];
 }
 //==========================================================================
 

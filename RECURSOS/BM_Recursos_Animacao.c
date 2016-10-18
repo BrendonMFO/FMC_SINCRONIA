@@ -1,5 +1,5 @@
 
-#include "BM_Animacao.h"
+#include "BM_Recursos_Animacao.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,12 +16,20 @@ BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao);
 //==========================================================================
 
 //==========================================================================
+// Obter fila de animações pendentes
+//==========================================================================
+BM_ANIMACAO_FILA *BM_Animacao_obter_fila() {
+	return animacoes;
+}
+//==========================================================================
+
+//==========================================================================
 // Iniciar fila de animações
 //==========================================================================
 int BM_Animacao_iniciar_fila() {
 	animacoes = (BM_ANIMACAO_FILA*)malloc(1 * sizeof(BM_ANIMACAO_FILA));
 	if (animacoes == NULL) {
-		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para a fila de animaçoes\n");
+		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para a fila de animacoes\n");
 		return ERRO;
 	}
 	animacoes->inicio = NULL;

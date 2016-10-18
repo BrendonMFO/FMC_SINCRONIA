@@ -9,6 +9,25 @@ ALLEGRO_TIMEOUT BM_Loop_timeout;
 //==========================================================================
 
 //==========================================================================
+// Prototipos
+//==========================================================================
+void BM_Eventos_iniciarListenerEventos();
+int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela);
+//==========================================================================
+
+//==========================================================================
+// Iniciar eventos
+//==========================================================================
+int BM_Eventos_iniciar(ALLEGRO_DISPLAY *_janela)
+{
+	if (BM_Eventos_janela(_janela) == ERRO)
+		return ERRO;
+	BM_Eventos_iniciarListenerEventos();
+	return SUCESSO;
+}
+//==========================================================================
+
+//==========================================================================
 // Iniciar fila de eventos da aplicação
 //==========================================================================
 int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela) {
@@ -24,7 +43,7 @@ int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela) {
 //==========================================================================
 // Iniciar variaveis responsaveis por escutar os eventos do jogo
 //==========================================================================
-void BM_Loop_iniciarListenerEventos() {
+void BM_Eventos_iniciarListenerEventos() {
 	al_init_timeout(&BM_Loop_timeout, 0.05);
 }
 //==========================================================================

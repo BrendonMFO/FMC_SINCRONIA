@@ -3,6 +3,7 @@
 #include "BM_Allegro.h"
 #include "BM_Recursos.h"
 #include "BM_Campo.h"
+#include "BM_Eventos.h"
 
 //==========================================================================
 // Carregar Dados

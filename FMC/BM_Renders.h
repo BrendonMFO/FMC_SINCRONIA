@@ -3,6 +3,7 @@
 #include "BM_Allegro.h"
 #include "BM_Recursos.h"
 #include "BM_Recursos_Sprites.h"
+#include "BM_Recursos_Animacao.h"
 #include "BM_Campo.h"
 
 //==========================================================================

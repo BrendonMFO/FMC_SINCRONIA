@@ -3,14 +3,15 @@
 //=========================================================================
 // Macros
 //=========================================================================
-#define RENDER_IMG(IMG,X,Y,FLAG) (al_draw_bitmap( BM_VETOR_SPRITES[(IMG)]->Imagem, (X), (Y), (FLAG)))
-#define RENDER_REGION(IMG,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region(BM_VETOR_SPRITES[(IMG)]->Imagem,(SX),(SY),(SW),(SH),(DX),(DY),(F)))
+#define RENDER_IMG(IMG,X,Y,FLAG) (al_draw_bitmap(SPRITES((IMG))->Imagem, (X), (Y), (FLAG)))
+#define RENDER_REGION(IMG,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region(SPRITES((IMG))->Imagem,(SX),(SY),(SW),(SH),(DX),(DY),(F)))
 //=========================================================================
 
 //==========================================================================
 // Prototipos
 //==========================================================================
 void BM_Render_campo();
+void BM_Render_animacao();
 void BM_Render_exagono(BM_Hexagono _hexagono);
 //==========================================================================
 
@@ -41,10 +42,18 @@ void BM_Render_campo() {
 //==========================================================================
 void BM_Render_exagono(BM_Hexagono _hexagono)
 {
-	int sourceW = BM_Allegro_largura_da_imagem(BM_VETOR_SPRITES[BM_IMG_HEXAGONO]->Imagem) / BM_VETOR_SPRITES[BM_IMG_HEXAGONO]->imagem->framesColunas;
-	int sourceH = BM_Allegro_altura_da_imagem(BM_VETOR_SPRITES[BM_IMG_HEXAGONO]->Imagem) / BM_VETOR_SPRITES[BM_IMG_HEXAGONO]->imagem->framesLinhas;
+	int sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesColunas;
+	int sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesLinhas;
 	int sourceX = sourceW * _hexagono.estado;
 	int sourceY = sourceH * _hexagono.elemento;
 	RENDER_REGION(BM_IMG_HEXAGONO, sourceX, sourceY, sourceW, sourceH, _hexagono.posicaoX, _hexagono.posicaoY, 0);
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar animações pendentes
+//==========================================================================
+void BM_Render_animacao() {
+	if (BM_Animacao_obter_fila());
 }
 //==========================================================================
