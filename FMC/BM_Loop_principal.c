@@ -1,5 +1,5 @@
 #include "BM_Loop_principal.h"
-#include "BM_Eventos.h"
+#include "BM_Allegro_eventos.h"
 
 //==========================================================================
 // Macros

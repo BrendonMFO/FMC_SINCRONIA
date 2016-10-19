@@ -7,6 +7,8 @@
 //==========================================================================
 #define ERRO 0
 #define SUCESSO 1
+#define SIM 1
+#define NAO 2
 //==========================================================================
 
 //==========================================================================
@@ -17,6 +19,10 @@ typedef struct BM_ANIMACAO_S
 	BM_SPRITES *sprite;
 	int renderX;
 	int renderY;
+	int render;
+	int tempoAtualizacao;
+	int tempoAtual;
+	int finalizado;
 	struct BM_ANIMACAO_S *anterior;
 	struct BM_ANIMACAO_S *proximo;
 }BM_ANIMACAO;
@@ -47,11 +53,17 @@ int BM_Animacao_iniciar_fila();
 //==========================================================================
 // Adicionar animação
 //==========================================================================
-int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY);
+int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, double _tempo);
 //==========================================================================
 
 //==========================================================================
 // Remover animação
 //==========================================================================
 void BM_Animacao_remover(BM_ANIMACAO *_animacao);
+//==========================================================================
+
+//==========================================================================
+// Avançar animacao
+//==========================================================================
+void BM_Animacao_avancar(BM_ANIMACAO *_animacao);
 //==========================================================================

@@ -1,61 +1,50 @@
-#include "BM_Eventos.h"
+#pragma once
 
 //==========================================================================
-// Variaveis para controle de eventos
+// Typedef's
 //==========================================================================
-ALLEGRO_EVENT_QUEUE *BM_Loop_filaEventos;
-ALLEGRO_EVENT BM_Loop_evento;
-ALLEGRO_TIMEOUT BM_Loop_timeout;
-//==========================================================================
-
-//==========================================================================
-// Prototipos
-//==========================================================================
-void BM_Eventos_iniciarListenerEventos();
-int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela);
+typedef void(*BM_Evento_funcao)(void);
 //==========================================================================
 
 //==========================================================================
-// Iniciar eventos
+// Estrutura de dados das funções que devem ser associadas aos eventoa
 //==========================================================================
-int BM_Eventos_iniciar(ALLEGRO_DISPLAY *_janela)
-{
-	if (BM_Eventos_janela(_janela) == ERRO)
-		return ERRO;
-	BM_Eventos_iniciarListenerEventos();
-	return SUCESSO;
-}
+typedef struct BM_EVENTOS_FUNCAO_S {
+	struct BM_EVENTOS_FUNCAO_S *anterior;
+	BM_Evento_funcao funcao;
+	struct BM_EVENTOS_FUNCAO_S *proximo;
+}BM_EVENTOS_FUNCAO;
 //==========================================================================
 
 //==========================================================================
-// Iniciar fila de eventos da aplicação
+// Fila de funções dos eventos
 //==========================================================================
-int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela) {
-	if (BM_Allegro_criar_eventos(&BM_Loop_filaEventos) == ERRO) {
-		fprintf(stderr, "ERRO: Nao foi possivel iniciar o listener de eventos da janela\n");
-		return ERRO;
-	}
-	al_register_event_source(BM_Loop_filaEventos, al_get_display_event_source(_janela));
-	return SUCESSO;
-}
+typedef struct BM_EVENTOS_FILA_S {
+	BM_EVENTOS_FUNCAO *inicio;
+	BM_EVENTOS_FUNCAO *fim;
+}BM_EVENTOS_FILA;
 //==========================================================================
 
 //==========================================================================
-// Iniciar variaveis responsaveis por escutar os eventos do jogo
+// Iniciar fila de eventos
 //==========================================================================
-void BM_Eventos_iniciarListenerEventos() {
-	al_init_timeout(&BM_Loop_timeout, 0.05);
-}
+int BM_Eventos_iniciar_fila_funcoes();
 //==========================================================================
 
 //==========================================================================
-// Eventos do jogo
+// Adicionar funcao na pilha
 //==========================================================================
-int BM_Eventos_processar() {
-	int tem_eventos = al_wait_for_event_until(BM_Loop_filaEventos, &BM_Loop_evento, &BM_Loop_timeout);
-	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-	{
-		return FECHAR_JOGO;
-	}
-}
+int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao);
+//==========================================================================
+
+//==========================================================================
+// Adicionar funcao na pilha
+//==========================================================================
+int BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao);
+//==========================================================================
+
+//==========================================================================
+// Obter fila de eventos
+//==========================================================================
+BM_EVENTOS_FILA *BM_Eventos_obter_fila_funcao();
 //==========================================================================

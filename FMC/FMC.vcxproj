@@ -162,7 +162,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BM_Eventos.c" />
     <ClCompile Include="BM_FMC_Carregar.c" />
     <ClCompile Include="BM_Loop_principal.c" />
     <ClCompile Include="BM_Renders.c" />
@@ -183,7 +182,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BM_Eventos.h" />
     <ClInclude Include="BM_FMC_Carregar.h" />
     <ClInclude Include="BM_Loop_principal.h" />
     <ClInclude Include="BM_Renders.h" />

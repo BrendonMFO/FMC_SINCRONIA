@@ -24,12 +24,24 @@
     <ClInclude Include="BM_Allegro_Imagens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BM_Allegro_eventos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BM_Allegro_eventos_funcoes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Allegro.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BM_Allegro_Imagens.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BM_Allegro_eventos.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BM_Allegro_eventos_funcoes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

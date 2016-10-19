@@ -4,6 +4,10 @@
 #include "BM_FMC_Carregar.h"
 #include "BM_Loop_principal.h"
 
+void teste() {
+	fprintf(stderr, "TESTE TESTE \n");
+}
+
 int main()
 {
 	//==========================================================================

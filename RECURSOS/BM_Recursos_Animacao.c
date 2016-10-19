@@ -1,18 +1,21 @@
 
 #include "BM_Recursos_Animacao.h"
+#include "BM_Allegro_eventos.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 //==========================================================================
 // Fila de animações pendentes
 //==========================================================================
-BM_ANIMACAO_FILA *animacoes;
+BM_ANIMACAO_FILA *animacoes = NULL;
+int animacaoAdicionada = 0;
 //==========================================================================
 
 //==========================================================================
 // Prototipos
 //==========================================================================
 BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao);
+void BM_Animacao_processar();
 //==========================================================================
 
 //==========================================================================
@@ -39,22 +42,27 @@ int BM_Animacao_iniciar_fila() {
 //==========================================================================
 
 //==========================================================================
-// Adicionar animação na lista
+// Adicionar animação na lista 25 / 60
 //==========================================================================
-int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY) {
+int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, double _tempo) {
 	BM_ANIMACAO *aux = (BM_ANIMACAO*)malloc(1 * sizeof(BM_ANIMACAO));
 	if (aux == NULL) {
-		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para uma animacao");
+		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para uma animacao\n");
 		return ERRO;
 	}
 	aux->sprite = _sprite;
 	aux->renderX = _renderX;
 	aux->renderY = _renderY;
+	aux->finalizado = NAO;
+	aux->render = NAO;
 	aux->anterior = NULL;
+	aux->tempoAtualizacao = (_tempo / (aux->sprite->imagem->framesColunas * aux->sprite->imagem->framesLinhas)) * 100;
+	aux->tempoAtual = 0;
 	if (animacoes->inicio == NULL) {
 		animacoes->inicio = aux;
 		animacoes->fim = aux;
 		aux->proximo = NULL;
+		BM_Eventos_Funcoes_adicionar(BM_Animacao_processar);
 	}
 	else
 	{
@@ -76,6 +84,7 @@ void BM_Animacao_remover(BM_ANIMACAO *_animacao) {
 	if (animacoes->inicio == animacoes->fim) {
 		animacoes->inicio = NULL;
 		animacoes->fim = NULL;
+		BM_Eventos_Funcoes_remover(BM_Animacao_processar);
 	}
 	else {
 		if (aux->anterior != NULL) 
@@ -92,6 +101,24 @@ void BM_Animacao_remover(BM_ANIMACAO *_animacao) {
 //==========================================================================
 
 //==========================================================================
+// Avançar animação
+//==========================================================================
+void BM_Animacao_avancar(BM_ANIMACAO *_animacao) {
+	if (_animacao != NULL) {
+		_animacao->sprite->frameAtualColuna++;
+		if (_animacao->sprite->frameAtualColuna > _animacao->sprite->imagem->framesColunas - 1) {
+			_animacao->sprite->frameAtualLinha++;
+			_animacao->sprite->frameAtualColuna = 0;
+			if (_animacao->sprite->frameAtualLinha > _animacao->sprite->imagem->framesLinhas - 1) {
+				_animacao->finalizado = SIM;
+				_animacao->sprite->frameAtualLinha = 0;
+			}
+		}
+	}
+}
+//==========================================================================
+
+//==========================================================================
 // Procurar na fila uma animação especifica
 //==========================================================================
 BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao) {
@@ -101,5 +128,22 @@ BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao) {
 			return NULL;
 	}
 	return aux;
+}
+//==========================================================================
+
+//==========================================================================
+// Processar animações
+//==========================================================================
+void BM_Animacao_processar() {
+	BM_ANIMACAO *aux;
+	for (aux = animacoes->inicio; aux != NULL; aux = aux->proximo) {
+		if (aux->tempoAtual >= aux->tempoAtualizacao) {
+			aux->render = SIM;
+			aux->tempoAtual = 0;
+		}
+		else {
+			aux->tempoAtual++;
+		}
+	}
 }
 //==========================================================================

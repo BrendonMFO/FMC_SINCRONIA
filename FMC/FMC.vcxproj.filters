@@ -30,9 +30,6 @@
     <ClCompile Include="BM_Loop_principal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BM_Eventos.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -45,9 +42,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BM_Loop_principal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BM_Eventos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

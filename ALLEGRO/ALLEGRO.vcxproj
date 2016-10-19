@@ -79,6 +79,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <CompileAs>CompileAsC</CompileAs>
+      <AdditionalIncludeDirectories>..\RECURSOS;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,10 +137,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BM_Allegro.h" />
+    <ClInclude Include="BM_Allegro_eventos.h" />
+    <ClInclude Include="BM_Allegro_eventos_funcoes.h" />
     <ClInclude Include="BM_Allegro_Imagens.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Allegro.c" />
+    <ClCompile Include="BM_Allegro_eventos.c" />
+    <ClCompile Include="BM_Allegro_eventos_funcoes.c" />
     <ClCompile Include="BM_Allegro_Imagens.c" />
   </ItemGroup>
   <ItemGroup>

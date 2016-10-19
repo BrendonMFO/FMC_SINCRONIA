@@ -12,6 +12,10 @@ int BM_Allegro_iniciar() {
 		fprintf(stderr, "Falha ao iniciar mouse Allegro\n");
 		return FALSE;
 	}
+	if (!al_install_keyboard()) {
+		fprintf(stderr, "Falha ao iniciar teclado Allegro\n");
+		return FALSE;
+	}
 	if (!al_init_image_addon()) {
 		fprintf(stderr, "Falha ao iniciar Addon de imagem Allegro\n");
 		return FALSE;

@@ -4,6 +4,7 @@
 // Macros
 //=========================================================================
 #define RENDER_IMG(IMG,X,Y,FLAG) (al_draw_bitmap(SPRITES((IMG))->Imagem, (X), (Y), (FLAG)))
+#define RENDER_REGION_SPRITE (SPRITE,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region((SPRITE),(SX),(SY),(SW),(SH),(DX),(DY),(F)))
 #define RENDER_REGION(IMG,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region(SPRITES((IMG))->Imagem,(SX),(SY),(SW),(SH),(DX),(DY),(F)))
 //=========================================================================
 
@@ -21,6 +22,7 @@ void BM_Render_exagono(BM_Hexagono _hexagono);
 void BM_Render_principal() {
 	RENDER_IMG(BM_IMG_MAPA_01, 0, 0, 0);
 	BM_Render_campo();
+	BM_Render_animacao();
 	al_flip_display();
 }
 //==========================================================================
@@ -54,6 +56,32 @@ void BM_Render_exagono(BM_Hexagono _hexagono)
 // Renderizar animações pendentes
 //==========================================================================
 void BM_Render_animacao() {
-	if (BM_Animacao_obter_fila());
+	BM_ANIMACAO *aux;
+	int sourceW, sourceH, sourceX, sourceY;
+	for (aux = BM_Animacao_obter_fila()->inicio; aux != NULL; aux = aux->proximo) {
+		sourceW = BM_Allegro_largura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesColunas;
+		sourceH = BM_Allegro_altura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesLinhas;
+		sourceX = sourceW * aux->sprite->frameAtualColuna;
+		sourceY = sourceH * aux->sprite->frameAtualLinha;
+		al_draw_bitmap_region(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->renderX, aux->renderY, 0);
+		if (aux->render == SIM) {
+			aux->render = NAO;
+			BM_Animacao_avancar(aux);
+		}
+	}
+	for (aux = BM_Animacao_obter_fila()->inicio; aux != NULL;) {
+		if (aux->finalizado == SIM) {
+			if (aux->proximo != NULL) {
+				aux = aux->proximo;
+				BM_Animacao_remover(aux->anterior);
+			}
+			else {
+				BM_Animacao_remover(aux);
+				break;
+			}
+		}
+		else
+			aux = aux->proximo;
+	}
 }
 //==========================================================================
