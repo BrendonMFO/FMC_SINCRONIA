@@ -1,50 +1,57 @@
 #pragma once
 
+#include "BM_Allegro.h"
+
 //==========================================================================
-// Typedef's
+// Definir novos tipos
 //==========================================================================
-typedef void(*BM_Evento_funcao)(void);
+typedef void(*BM_MOUSE_FUNCAO)(int, ...);
 //==========================================================================
 
 //==========================================================================
-// Estrutura de dados das funções que devem ser associadas aos eventoa
+// Estrutura de dados para os eventos do mouse
 //==========================================================================
-typedef struct BM_EVENTOS_FUNCAO_S {
-	struct BM_EVENTOS_FUNCAO_S *anterior;
-	BM_Evento_funcao funcao;
-	struct BM_EVENTOS_FUNCAO_S *proximo;
-}BM_EVENTOS_FUNCAO;
+typedef struct BM_EVENTO_MOUSE_S
+{
+	int inicial_X;
+	int inicial_Y;
+	int final_X;
+	int final_Y;
+	BM_MOUSE_FUNCAO funcao;
+	struct BM_EVENTO_MOUSE_S *anterior;
+	struct BM_EVENTO_MOUSE_S *proximo;
+}BM_EVENTO_MOUSE;
 //==========================================================================
 
 //==========================================================================
-// Fila de funções dos eventos
+// Fila de eventos do mouse
 //==========================================================================
-typedef struct BM_EVENTOS_FILA_S {
-	BM_EVENTOS_FUNCAO *inicio;
-	BM_EVENTOS_FUNCAO *fim;
-}BM_EVENTOS_FILA;
+typedef struct BM_EVENTO_MOUSE_FILA_S {
+	BM_EVENTO_MOUSE *inicio;
+	BM_EVENTO_MOUSE *fim;
+}BM_EVENTO_MOUSE_FILA;
 //==========================================================================
 
 //==========================================================================
 // Iniciar fila de eventos
 //==========================================================================
-int BM_Eventos_iniciar_fila_funcoes();
+int BM_Eventos_Mouse_iniciar_fila_mouse();
 //==========================================================================
 
 //==========================================================================
-// Adicionar funcao na fila
+// Adicionar funcao na pilha
 //==========================================================================
-int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao);
+int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY);
 //==========================================================================
 
 //==========================================================================
-// Adicionar funcao na fila
+// Adicionar funcao na pilha
 //==========================================================================
-int BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao);
+void BM_Eventos_Mouse_remover(BM_MOUSE_FUNCAO _funcao);
 //==========================================================================
 
 //==========================================================================
 // Obter fila de eventos
 //==========================================================================
-BM_EVENTOS_FILA *BM_Eventos_obter_fila_funcao();
+BM_EVENTO_MOUSE_FILA *BM_Eventos_Mouse_obter_fila_funcao();
 //==========================================================================

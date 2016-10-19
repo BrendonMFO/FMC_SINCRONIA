@@ -25,6 +25,7 @@ int BM_FMC_carregar_recursos() {
 	return 
 		BM_Allegro_iniciar() &&
 		BM_Eventos_iniciar_fila_funcoes() &&
+		BM_Eventos_Mouse_iniciar_fila_mouse() &&
 		BM_Recursos_carregar_Sprites() &&
 		BM_Animacao_iniciar_fila();
 }

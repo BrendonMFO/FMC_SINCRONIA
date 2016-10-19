@@ -61,8 +61,8 @@ void BM_Render_animacao() {
 	for (aux = BM_Animacao_obter_fila()->inicio; aux != NULL; aux = aux->proximo) {
 		sourceW = BM_Allegro_largura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesColunas;
 		sourceH = BM_Allegro_altura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesLinhas;
-		sourceX = sourceW * aux->sprite->frameAtualColuna;
-		sourceY = sourceH * aux->sprite->frameAtualLinha;
+		sourceX = sourceW * aux->frameAtualColuna;
+		sourceY = sourceH * aux->frameAtualLinha;
 		al_draw_bitmap_region(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->renderX, aux->renderY, 0);
 		if (aux->render == SIM) {
 			aux->render = NAO;

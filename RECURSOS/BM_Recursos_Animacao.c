@@ -51,6 +51,8 @@ int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, doubl
 		return ERRO;
 	}
 	aux->sprite = _sprite;
+	aux->frameAtualColuna = 0;
+	aux->frameAtualLinha = 0;
 	aux->renderX = _renderX;
 	aux->renderY = _renderY;
 	aux->finalizado = NAO;
@@ -105,13 +107,13 @@ void BM_Animacao_remover(BM_ANIMACAO *_animacao) {
 //==========================================================================
 void BM_Animacao_avancar(BM_ANIMACAO *_animacao) {
 	if (_animacao != NULL) {
-		_animacao->sprite->frameAtualColuna++;
-		if (_animacao->sprite->frameAtualColuna > _animacao->sprite->imagem->framesColunas - 1) {
-			_animacao->sprite->frameAtualLinha++;
-			_animacao->sprite->frameAtualColuna = 0;
-			if (_animacao->sprite->frameAtualLinha > _animacao->sprite->imagem->framesLinhas - 1) {
+		_animacao->frameAtualColuna++;
+		if (_animacao->frameAtualColuna > _animacao->sprite->imagem->framesColunas - 1) {
+			_animacao->frameAtualLinha++;
+			_animacao->frameAtualColuna = 0;
+			if (_animacao->frameAtualLinha > _animacao->sprite->imagem->framesLinhas - 1) {
 				_animacao->finalizado = SIM;
-				_animacao->sprite->frameAtualLinha = 0;
+				_animacao->frameAtualLinha = 0;
 			}
 		}
 	}

@@ -8,7 +8,8 @@
 typedef struct BM_PLAYER_S {
 	int quantidadeTerritorio;
 	int hexagonoAtual;
-	BM_ELEMENTOS_NIVEL elementos;
+	BM_ELEMENTOS elementosNivel;
+	BM_ELEMENTOS elementosQuantidade;
 }BM_PLAYER;
 //==========================================================================
 

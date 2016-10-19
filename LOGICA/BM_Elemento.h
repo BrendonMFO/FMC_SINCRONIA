@@ -18,14 +18,14 @@ enum BM_ELEMENTO
 //==========================================================================
 // Estrutura de dados de nivel dos elementos
 //==========================================================================
-typedef struct BM_ELEMENTOS_NIVEL_S {
+typedef struct BM_ELEMENTOS_INFO_S {
 	int luz;
 	int trevas;
 	int fogo;
 	int agua;
 	int terra;
 	int ar;
-}BM_ELEMENTOS_NIVEL;
+}BM_ELEMENTOS;
 //==========================================================================
 
 //==========================================================================

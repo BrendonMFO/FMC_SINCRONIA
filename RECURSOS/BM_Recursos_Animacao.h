@@ -17,6 +17,8 @@
 typedef struct BM_ANIMACAO_S
 {
 	BM_SPRITES *sprite;
+	int frameAtualLinha;
+	int frameAtualColuna;
 	int renderX;
 	int renderY;
 	int render;

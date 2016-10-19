@@ -1,4 +1,5 @@
 #include "BM_Allegro_eventos.h"
+#include "BM_Allegro_eventos_mouse.h"
 #include "BM_Recursos_Animacao.h"
 #include "BM_Recursos.h"
 
@@ -15,7 +16,6 @@ ALLEGRO_TIMEOUT BM_Loop_timeout;
 //==========================================================================
 void BM_Eventos_iniciarListenerEventos();
 void BM_Eventos_executarFilaFuncoes();
-void BM_Eventos_teclado();
 int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela);
 //==========================================================================
 
@@ -24,6 +24,14 @@ int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela);
 //==========================================================================
 ALLEGRO_EVENT_QUEUE *BM_Eventos_obter_fila() {
 	return BM_Loop_filaEventos;
+}
+//==========================================================================
+
+//==========================================================================
+// Get eventos
+//==========================================================================
+ALLEGRO_EVENT BM_Eventos_obter_evento() {
+	return BM_Loop_evento;
 }
 //==========================================================================
 
@@ -58,6 +66,7 @@ int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela) {
 void BM_Eventos_iniciarListenerEventos() {
 	al_init_timeout(&BM_Loop_timeout, 0.05);
 	al_register_event_source(BM_Loop_filaEventos, al_get_keyboard_event_source());
+	al_register_event_source(BM_Loop_filaEventos, al_get_mouse_event_source());
 }
 //==========================================================================
 
@@ -67,8 +76,11 @@ void BM_Eventos_iniciarListenerEventos() {
 int BM_Eventos_processar() {
 	int tem_eventos = al_wait_for_event_until(BM_Loop_filaEventos, &BM_Loop_evento, &BM_Loop_timeout);
 	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)	return FECHAR_JOGO;
-	BM_Eventos_teclado();
-	BM_Eventos_executarFilaFuncoes();
+	if (tem_eventos)
+	{
+		BM_Eventos_executarFilaFuncoes();
+	}
+	return LOOP;
 }
 //==========================================================================
 
@@ -80,21 +92,6 @@ void BM_Eventos_executarFilaFuncoes() {
 	if (BM_Eventos_obter_fila_funcao() != NULL) {
 		for (aux = BM_Eventos_obter_fila_funcao()->inicio; aux != NULL; aux = aux->proximo) {
 			aux->funcao();
-		}
-	}
-}
-//==========================================================================
-
-//==========================================================================
-// Processar eventos do teclado
-//==========================================================================
-void BM_Eventos_teclado() {
-	if (BM_Loop_evento.type == ALLEGRO_EVENT_KEY_DOWN)
-	{
-		switch (BM_Loop_evento.keyboard.keycode) {
-			case ALLEGRO_KEY_UP:
-				BM_Animacao_adicionar(SPRITES(BM_IMG_ANI_AGUA), 50, 50, 0.5);
-				break;
 		}
 	}
 }

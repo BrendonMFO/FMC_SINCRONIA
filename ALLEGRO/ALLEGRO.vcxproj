@@ -139,12 +139,14 @@
     <ClInclude Include="BM_Allegro.h" />
     <ClInclude Include="BM_Allegro_eventos.h" />
     <ClInclude Include="BM_Allegro_eventos_funcoes.h" />
+    <ClInclude Include="BM_Allegro_eventos_mouse.h" />
     <ClInclude Include="BM_Allegro_Imagens.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Allegro.c" />
     <ClCompile Include="BM_Allegro_eventos.c" />
     <ClCompile Include="BM_Allegro_eventos_funcoes.c" />
+    <ClCompile Include="BM_Allegro_eventos_mouse.c" />
     <ClCompile Include="BM_Allegro_Imagens.c" />
   </ItemGroup>
   <ItemGroup>

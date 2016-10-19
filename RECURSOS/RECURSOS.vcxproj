@@ -155,7 +155,6 @@
   <ItemGroup>
     <ClCompile Include="BM_Recursos_Animacao.c" />
     <ClCompile Include="BM_Recursos.c" />
-    <ClCompile Include="BM_Recursos_Sprites.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALLEGRO\ALLEGRO.vcxproj">

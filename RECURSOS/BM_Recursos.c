@@ -46,8 +46,6 @@ BM_SPRITES *carregar_sprite(char *_arquivo, int _framesLinhas, int _framesColuna
 		fprintf(stderr, "Erro ao carregar Sprite : %s", _arquivo);
 		return NULL;
 	}
-	temp->frameAtualColuna = 0;
-	temp->frameAtualLinha = 0;
 	return temp;
 }
 //==========================================================================

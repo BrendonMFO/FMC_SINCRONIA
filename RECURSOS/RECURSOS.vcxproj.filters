@@ -29,9 +29,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BM_Recursos_Sprites.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BM_Recursos.c">
       <Filter>Source Files</Filter>
     </ClCompile>
