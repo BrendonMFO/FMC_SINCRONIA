@@ -32,6 +32,7 @@ int BM_Recursos_carregar_Sprites()
 	BM_VETOR_SPRITES[0] = carregar_sprite("Mapa_01.bmp", 1, 1);
 	BM_VETOR_SPRITES[1] = carregar_sprite("Hexagono_1.png", 7, 3);
 	BM_VETOR_SPRITES[2] = carregar_sprite("Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
+	BM_VETOR_SPRITES[3] = carregar_sprite("Recursos\\Sprites\\Player.png", 1, 1);
 	return checarArquivos();
 }
 //==========================================================================

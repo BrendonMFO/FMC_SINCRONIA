@@ -23,6 +23,7 @@ enum ENUM_SPRITES
 {
 	BM_IMG_MAPA_01,
 	BM_IMG_HEXAGONO,
-	BM_IMG_ANI_AGUA
+	BM_IMG_ANI_AGUA,
+	BM_IMG_PLAYER
 };
 //==========================================================================

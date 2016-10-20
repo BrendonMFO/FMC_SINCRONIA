@@ -1,12 +1,7 @@
 
-#include "BM_Allegro.h"
 #include "BM_Allegro_Imagens.h"
 #include "BM_FMC_Carregar.h"
 #include "BM_Loop_principal.h"
-
-void teste() {
-	fprintf(stderr, "TESTE TESTE \n");
-}
 
 int main()
 {
@@ -20,6 +15,7 @@ int main()
 	// Carregar dados
 	//==========================================================================
 	if (BM_FMC_carregar(janela) == ERRO) {
+		getchar();
 		return -1;
 	}
 	//==========================================================================

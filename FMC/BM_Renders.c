@@ -1,4 +1,9 @@
 #include "BM_Renders.h"
+#include "BM_Recursos.h"
+#include "BM_Recursos_Sprites.h"
+#include "BM_Recursos_Animacao.h"
+#include "BM_Player.h"
+#include "BM_Campo.h"
 
 //=========================================================================
 // Macros
@@ -13,6 +18,7 @@
 //==========================================================================
 void BM_Render_campo();
 void BM_Render_animacao();
+void BM_Render_player();
 void BM_Render_exagono(BM_Hexagono _hexagono);
 //==========================================================================
 
@@ -23,6 +29,7 @@ void BM_Render_principal() {
 	RENDER_IMG(BM_IMG_MAPA_01, 0, 0, 0);
 	BM_Render_campo();
 	BM_Render_animacao();
+	BM_Render_player();
 	al_flip_display();
 }
 //==========================================================================
@@ -63,7 +70,7 @@ void BM_Render_animacao() {
 		sourceH = BM_Allegro_altura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesLinhas;
 		sourceX = sourceW * aux->frameAtualColuna;
 		sourceY = sourceH * aux->frameAtualLinha;
-		al_draw_bitmap_region(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->renderX, aux->renderY, 0);
+		RENDER_REGION(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->renderX, aux->renderY, 0);
 		if (aux->render == SIM) {
 			aux->render = NAO;
 			BM_Animacao_avancar(aux);
@@ -85,3 +92,17 @@ void BM_Render_animacao() {
 	}
 }
 //==========================================================================
+
+//==========================================================================
+// Renderizar players
+//==========================================================================
+void BM_Render_player() {
+	int sourceW, sourceH, destinoX, destinoY;
+	sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_PLAYER)->Imagem);
+	sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_PLAYER)->Imagem);
+	destinoX = (sourceW / 2) + BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].posicaoX;
+	destinoY = (sourceH / 6) + BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].posicaoY;
+	RENDER_REGION(BM_IMG_PLAYER, 0, 0, sourceW, sourceH, destinoX, destinoY, 0);
+}
+//==========================================================================
+
