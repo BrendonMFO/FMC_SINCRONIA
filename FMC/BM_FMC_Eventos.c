@@ -107,12 +107,26 @@ void BM_Hexagono_alvo(void) {
 //==========================================================================
 void BM_Elemento_escolha(void) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
+	BM_Campo *campo = BM_Campo_getCampo();
+	BM_EVENTO_MOUSE *mouse;
+	int elemento;
 	switch (aux.type) {
 	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+		mouse = BM_Eventos_Mouse_processar(aux.mouse.x, aux.mouse.y);
+		if (mouse != NULL) {
+			elemento = *(int*)mouse->opcional;
+			campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].elemento = elemento;
+			campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = JOGADOR;
+			BM_Elemento_remover_mouse_listener();
+			BM_Render_remover_funcao(BM_Render_elementos);
+			BM_Eventos_Funcoes_remover(BM_Elemento_escolha);
+			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+		}
 		break;
 	case ALLEGRO_EVENT_KEY_DOWN:
 		switch (aux.keyboard.keycode) {
 		case ALLEGRO_KEY_ESCAPE:
+			BM_Elemento_remover_mouse_listener();
 			BM_Render_remover_funcao(BM_Render_elementos);
 			BM_Eventos_Funcoes_remover(BM_Elemento_escolha);
 			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
