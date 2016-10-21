@@ -6,6 +6,8 @@
 #include "BM_Allegro_eventos_mouse.h"
 #include "BM_Recursos.h"
 #include "BM_Campo.h"
+#include "BM_Player.h"
+#include "BM_Player_IA.h"
 
 //==========================================================================
 // Carregar Dados

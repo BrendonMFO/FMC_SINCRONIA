@@ -31,7 +31,7 @@ int BM_Eventos_Mouse_iniciar_fila_mouse() {
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, char *_opcional) {
+int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, void *_opcional) {
 	BM_EVENTO_MOUSE *aux = (BM_EVENTO_MOUSE*)malloc(1 * sizeof(BM_EVENTO_MOUSE));
 	if (aux == NULL) {
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um evento do mouse\n");
@@ -42,8 +42,7 @@ int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _f
 	aux->final_X = _fX;
 	aux->final_Y = _fY;
 	aux->funcao = _funcao;
-	aux->opcional = (char*)malloc(strlen(_opcional) * sizeof(char));
-	strcpy(aux->opcional, _opcional);
+	aux->opcional = _opcional;
 	aux->anterior = NULL;
 	if (BM_Fila_eventos_mouse->inicio == NULL) {
 		BM_Fila_eventos_mouse->inicio = aux;
@@ -81,6 +80,7 @@ void BM_Eventos_Mouse_remover(int _posicaoX, int _posicaoY, int _finalX, int _fi
 		else
 			BM_Fila_eventos_mouse->fim = aux->anterior;
 	}
+	free(aux->opcional);
 	free(aux);
 }
 //==========================================================================

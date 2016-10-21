@@ -17,7 +17,6 @@
 // Variaveis
 //==========================================================================
 BM_PLAYER *jogador = NULL;
-BM_PLAYER *ia = NULL;
 //==========================================================================
 
 //==========================================================================
@@ -25,13 +24,12 @@ BM_PLAYER *ia = NULL;
 //==========================================================================
 void iniciarValores(BM_PLAYER *_player, int _hexagono);
 void BM_Player_mover(BM_PLAYER *_player, int _mouseX, int _mouseY);
-void BM_Player_eventos();
 //==========================================================================
 
 //==========================================================================
 // Iniciar player
 //==========================================================================
-int BM_Player_iniciar(int _hexagonoInicialJogador, int _hexagonoInicialIA)
+int BM_Player_iniciar(int _hexagonoInicialJogador)
 {
 	//======================================================================
 	// Alocar memoria para o player do jogador
@@ -44,17 +42,6 @@ int BM_Player_iniciar(int _hexagonoInicialJogador, int _hexagonoInicialIA)
 	iniciarValores(jogador, _hexagonoInicialJogador);
 	//======================================================================
 
-	//======================================================================
-	// Alocar memoria para o player da IA
-	//======================================================================
-	ia = (BM_PLAYER*)malloc(1 * sizeof(BM_PLAYER));
-	if (ia == NULL) {
-		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um player");
-		return ERRO;
-	}
-	iniciarValores(ia, _hexagonoInicialIA);
-	//======================================================================
-
 	return SUCESSO;
 }
 //==========================================================================
@@ -64,14 +51,6 @@ int BM_Player_iniciar(int _hexagonoInicialJogador, int _hexagonoInicialIA)
 //==========================================================================
 BM_PLAYER *BM_Player_getJogador() {
 	return jogador;
-}
-//==========================================================================
-
-//==========================================================================
-// Get IA
-//==========================================================================
-BM_PLAYER *BM_Player_getIAPlayer() {
-	return ia;
 }
 //==========================================================================
 

@@ -18,7 +18,7 @@ typedef struct BM_EVENTO_MOUSE_S
 	int final_X;
 	int final_Y;
 	BM_MOUSE_FUNCAO *funcao;
-	char *opcional;
+	void *opcional;
 	struct BM_EVENTO_MOUSE_S *anterior;
 	struct BM_EVENTO_MOUSE_S *proximo;
 }BM_EVENTO_MOUSE;

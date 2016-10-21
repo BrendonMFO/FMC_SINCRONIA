@@ -140,11 +140,14 @@
     <ClInclude Include="BM_Elemento.h" />
     <ClInclude Include="BM_Hexagono.h" />
     <ClInclude Include="BM_Player.h" />
+    <ClInclude Include="BM_Player_IA.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Campo.c" />
+    <ClCompile Include="BM_Elemento.c" />
     <ClCompile Include="BM_Hexagono.c" />
     <ClCompile Include="BM_Player.c" />
+    <ClCompile Include="BM_Player_IA.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

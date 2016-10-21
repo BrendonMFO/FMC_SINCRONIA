@@ -40,6 +40,7 @@ int BM_Recursos_carregar_Sprites()
 	NEW_SPRITE(2, "Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
 	NEW_SPRITE(3, "Recursos\\Sprites\\Player.png", 1, 1);
 	NEW_SPRITE(4, "Recursos\\Sprites\\Hexagono_Alvo.png", 1, 1);
+	NEW_SPRITE(5, "Recursos\\Sprites\\Elementos.png", 1, 6);
 	return checarArquivos();
 }
 //==========================================================================

@@ -1,24 +1,25 @@
 #pragma once
 
-#include "BM_Recursos_Sprites.h"
+#include "BM_Player.h"
+#include "BM_Hexagono.h"
 
 //==========================================================================
-// Constantes
+// Estrutura de dados do jogador IA
 //==========================================================================
-#define ERRO 0
-#define SUCESSO 1
-#define QUANTIDADE_SPRITES 6
-#define SPRITES(INDICE) BM_Recursos_obter_recurso((INDICE))
-//==========================================================================
-
-//==========================================================================
-// Obter array com os recursos visuais carregados
-//==========================================================================
-BM_SPRITES *BM_Recursos_obter_recurso(int _indice);
+typedef struct BM_JOGADOR_IA_S {
+	BM_PLAYER *ia;
+	BM_FILA_HEXAGONO *hexagonos;
+}BM_JOGADOR_IA;
 //==========================================================================
 
 //==========================================================================
-// Carregar Sprites
+// Iniciar player IA
 //==========================================================================
-int BM_Recursos_carregar_Sprites();
+int BM_Player_IA_iniciar(int _hexagonoAtual);
+//==========================================================================
+
+//==========================================================================
+// Get IA
+//==========================================================================
+BM_JOGADOR_IA *BM_Player_getIAPlayer();
 //==========================================================================

@@ -14,7 +14,8 @@ int BM_FMC_carregar() {
 	return
 		BM_FMC_carregar_recursos() &&
 		BM_FMC_carregar_campo() &&
-		BM_Player_iniciar(0, BM_Campo_getCampo()->quantidade - 1);
+		BM_Player_iniciar(0) &&
+		BM_Player_IA_iniciar(BM_Campo_getCampo()->quantidade - 1);
 }
 //==========================================================================
 
@@ -22,12 +23,13 @@ int BM_FMC_carregar() {
 // Carregar Recursos
 //==========================================================================
 int BM_FMC_carregar_recursos() {
-	return 
+	return
 		BM_Allegro_iniciar() &&
+		BM_Recursos_carregar_Sprites() &&
 		BM_Eventos_iniciar_fila_funcoes() &&
 		BM_Eventos_Mouse_iniciar_fila_mouse() &&
-		BM_Recursos_carregar_Sprites() &&
-		BM_Animacao_iniciar_fila();
+		BM_Animacao_iniciar_fila() &&
+		BM_Render_iniciar_fila();
 }
 //==========================================================================
 

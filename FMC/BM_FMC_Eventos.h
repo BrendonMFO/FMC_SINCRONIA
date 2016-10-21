@@ -5,6 +5,7 @@
 #include "BM_Allegro_eventos_mouse.h"
 #include "BM_Hexagono.h"
 #include "BM_Player.h"
+#include "BM_Player_IA.h"
 
 //==========================================================================
 // Evento inicial
