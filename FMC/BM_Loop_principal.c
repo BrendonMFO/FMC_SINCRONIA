@@ -1,5 +1,6 @@
 #include "BM_Loop_principal.h"
 #include "BM_Allegro_eventos.h"
+#include "BM_FMC_Eventos.h"
 
 //==========================================================================
 // Macros
@@ -30,6 +31,7 @@ BOOL BM_Loop_finalizar = FALSE;
 // Loop principal
 //==========================================================================
 void BM_Loop() {
+	BM_FMC_Evento_inicial();
 	while (!BM_Loop_finalizar) {
 		BM_Loop_iniciarTimer();
 		if (BM_Eventos_processar() == FECHAR_JOGO) BM_Loop_finalizar = TRUE;

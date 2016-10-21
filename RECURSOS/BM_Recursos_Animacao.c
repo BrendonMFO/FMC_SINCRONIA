@@ -15,7 +15,7 @@ int animacaoAdicionada = 0;
 // Prototipos
 //==========================================================================
 BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao);
-void BM_Animacao_processar();
+void BM_Animacao_processar(void);
 //==========================================================================
 
 //==========================================================================

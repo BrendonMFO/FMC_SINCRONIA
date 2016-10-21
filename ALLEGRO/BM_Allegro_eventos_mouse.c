@@ -1,4 +1,5 @@
 #include "BM_Allegro_eventos_mouse.h"
+#include <string.h>
 
 //==========================================================================
 // Variaveis
@@ -9,7 +10,7 @@ BM_EVENTO_MOUSE_FILA *BM_Fila_eventos_mouse = NULL;
 //==========================================================================
 // Prototipos
 //==========================================================================
-BM_EVENTO_MOUSE *BM_Eventos_procurar_fila_mouse(BM_MOUSE_FUNCAO *_funcao);
+BM_EVENTO_MOUSE *BM_Eventos_procurar_fila_mouse(int _posicaoX, int _posicaoY, int _finalX, int _finalY);
 //==========================================================================
 
 //==========================================================================
@@ -30,7 +31,7 @@ int BM_Eventos_Mouse_iniciar_fila_mouse() {
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY) {
+int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, char *_opcional) {
 	BM_EVENTO_MOUSE *aux = (BM_EVENTO_MOUSE*)malloc(1 * sizeof(BM_EVENTO_MOUSE));
 	if (aux == NULL) {
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um evento do mouse\n");
@@ -41,6 +42,9 @@ int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _f
 	aux->final_X = _fX;
 	aux->final_Y = _fY;
 	aux->funcao = _funcao;
+	aux->opcional = (char*)malloc(strlen(_opcional) * sizeof(char));
+	strcpy(aux->opcional, _opcional);
+	aux->anterior = NULL;
 	if (BM_Fila_eventos_mouse->inicio == NULL) {
 		BM_Fila_eventos_mouse->inicio = aux;
 		BM_Fila_eventos_mouse->fim = aux;
@@ -59,8 +63,8 @@ int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _f
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-void BM_Eventos_Mouse_remover(BM_MOUSE_FUNCAO _funcao) {
-	BM_EVENTO_MOUSE *aux = BM_Eventos_procurar_fila_mouse(_funcao);
+void BM_Eventos_Mouse_remover(int _posicaoX, int _posicaoY, int _finalX, int _finalY) {
+	BM_EVENTO_MOUSE *aux = BM_Eventos_procurar_fila_mouse(_posicaoX, _posicaoY, _finalX, _finalY);
 	if (aux == NULL)
 		return;
 	if (BM_Fila_eventos_mouse->inicio == BM_Fila_eventos_mouse->fim) {
@@ -90,12 +94,26 @@ BM_EVENTO_MOUSE_FILA *BM_Eventos_Mouse_obter_fila_funcao() {
 //==========================================================================
 
 //==========================================================================
+// Processar fila
+//==========================================================================
+BM_EVENTO_MOUSE *BM_Eventos_Mouse_processar(int _clickX, int _clickY) {
+	BM_EVENTO_MOUSE *aux;
+	for (aux = BM_Fila_eventos_mouse->inicio; aux != NULL; aux = aux->proximo) 
+		if (_clickX >= aux->inicial_X && _clickX <= aux->final_X &&
+			_clickY >= aux->inicial_Y && _clickY <= aux->final_Y)
+			break;
+	return aux;
+}
+//==========================================================================
+
+//==========================================================================
 // Procurar na fila uma animação especifica
 //==========================================================================
-BM_EVENTO_MOUSE *BM_Eventos_procurar_fila_mouse(BM_MOUSE_FUNCAO *_funcao) {
+BM_EVENTO_MOUSE *BM_Eventos_procurar_fila_mouse(int _posicaoX, int _posicaoY, int _finalX, int _finalY) {
 	BM_EVENTO_MOUSE *aux;
 	for (aux = BM_Fila_eventos_mouse->inicio; aux != NULL; aux = aux->proximo) {
-		if (aux->funcao == _funcao)
+		if (aux->inicial_X == _posicaoX && aux->inicial_Y == _posicaoY && 
+			aux->final_X == _finalX && aux->final_Y == _finalY)
 			break;
 	}
 	return aux;

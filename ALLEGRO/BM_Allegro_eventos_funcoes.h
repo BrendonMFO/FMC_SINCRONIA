@@ -7,10 +7,18 @@ typedef void(*BM_Evento_funcao)(void);
 //==========================================================================
 
 //==========================================================================
+// Constantes
+//==========================================================================
+#define ATIVO 1
+#define INATIVO 0
+//==========================================================================
+
+//==========================================================================
 // Estrutura de dados das funções que devem ser associadas aos eventoa
 //==========================================================================
 typedef struct BM_EVENTOS_FUNCAO_S {
 	struct BM_EVENTOS_FUNCAO_S *anterior;
+	int ativo;
 	BM_Evento_funcao funcao;
 	struct BM_EVENTOS_FUNCAO_S *proximo;
 }BM_EVENTOS_FUNCAO;
@@ -40,7 +48,7 @@ int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao);
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-int BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao);
+void BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao);
 //==========================================================================
 
 //==========================================================================

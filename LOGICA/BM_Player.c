@@ -42,7 +42,6 @@ int BM_Player_iniciar(int _hexagonoInicialJogador, int _hexagonoInicialIA)
 		return ERRO;
 	}
 	iniciarValores(jogador, _hexagonoInicialJogador);
-	BM_Eventos_Funcoes_adicionar(BM_Player_eventos);
 	//======================================================================
 
 	//======================================================================
@@ -123,17 +122,6 @@ void BM_Player_mover(BM_PLAYER *_player, int _mouseX, int _mouseY) {
 				}
 			}
 		}
-	}
-}
-//==========================================================================
-
-//==========================================================================
-// Eventos de teclado do jogador
-//==========================================================================
-void BM_Player_eventos() {
-	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
-	if (aux.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-		BM_Player_mover(jogador, aux.mouse.x, aux.mouse.y);
 	}
 }
 //==========================================================================

@@ -76,10 +76,7 @@ void BM_Eventos_iniciarListenerEventos() {
 int BM_Eventos_processar() {
 	int tem_eventos = al_wait_for_event_until(BM_Loop_filaEventos, &BM_Loop_evento, &BM_Loop_timeout);
 	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)	return FECHAR_JOGO;
-	if (tem_eventos)
-	{
-		BM_Eventos_executarFilaFuncoes();
-	}
+	if (tem_eventos) BM_Eventos_executarFilaFuncoes();
 	return LOOP;
 }
 //==========================================================================
@@ -88,10 +85,19 @@ int BM_Eventos_processar() {
 // Executar fila de funções
 //==========================================================================
 void BM_Eventos_executarFilaFuncoes() {
-	BM_EVENTOS_FUNCAO *aux;
+	BM_EVENTOS_FUNCAO *aux, *aux2;
 	if (BM_Eventos_obter_fila_funcao() != NULL) {
-		for (aux = BM_Eventos_obter_fila_funcao()->inicio; aux != NULL; aux = aux->proximo) {
+		for (aux = BM_Eventos_obter_fila_funcao()->inicio; aux != NULL;) {
 			aux->funcao();
+			if (aux->ativo == INATIVO) {
+				if (aux->proximo == NULL) aux = NULL;
+				else {
+					aux2 = aux->proximo;
+					free(aux);
+					aux = aux2;
+				}
+			}
+			else aux = aux->proximo;
 		}
 	}
 }

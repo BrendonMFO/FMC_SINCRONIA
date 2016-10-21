@@ -5,6 +5,11 @@
 //==========================================================================
 #define FALSE 0
 #define TRUE 1
+#define VITORIA_ATAQUE 1
+#define VITORIA_DEFESA 2
+#define EMPATE 3
+#define DESMARCAR 0
+#define MARCAR 1
 //==========================================================================
 
 //==========================================================================
@@ -26,6 +31,7 @@ typedef struct BM_Hexagono_S {
 	int estado;
 	int elemento;
 	int visivel;
+	int alvo;
 	int posicaoX;
 	int posicaoY;
 	int conexoes[6];
@@ -42,4 +48,16 @@ BM_Hexagono BM_Hexagono_criar(int _id, int _estado, int _elemento);
 // Alterar estado e elemento do hexagono
 //==========================================================================
 void BM_Hexagono_alterar(BM_Hexagono *_hexagono, int _estado, int _elemento);
+//==========================================================================
+
+//==========================================================================
+// Marcar alvos
+//==========================================================================
+int BM_Hexagono_marcar_alvos(int _centro, int _acao);
+//==========================================================================
+
+//==========================================================================
+// Dominar territorio
+//==========================================================================
+int BM_Hexagono_batalha(int _alvo, int _atacante);
 //==========================================================================

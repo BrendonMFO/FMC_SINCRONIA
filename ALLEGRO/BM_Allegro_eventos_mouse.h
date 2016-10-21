@@ -17,7 +17,8 @@ typedef struct BM_EVENTO_MOUSE_S
 	int inicial_Y;
 	int final_X;
 	int final_Y;
-	BM_MOUSE_FUNCAO funcao;
+	BM_MOUSE_FUNCAO *funcao;
+	char *opcional;
 	struct BM_EVENTO_MOUSE_S *anterior;
 	struct BM_EVENTO_MOUSE_S *proximo;
 }BM_EVENTO_MOUSE;
@@ -41,17 +42,23 @@ int BM_Eventos_Mouse_iniciar_fila_mouse();
 //==========================================================================
 // Adicionar funcao na pilha
 //==========================================================================
-int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY);
+int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, char *_opcional);
 //==========================================================================
 
 //==========================================================================
 // Adicionar funcao na pilha
 //==========================================================================
-void BM_Eventos_Mouse_remover(BM_MOUSE_FUNCAO _funcao);
+void BM_Eventos_Mouse_remover(int _posicaoX, int _posicaoY, int _finalX, int _finalY);
 //==========================================================================
 
 //==========================================================================
 // Obter fila de eventos
 //==========================================================================
 BM_EVENTO_MOUSE_FILA *BM_Eventos_Mouse_obter_fila_funcao();
+//==========================================================================
+
+//==========================================================================
+// Processar fila
+//==========================================================================
+BM_EVENTO_MOUSE *BM_Eventos_Mouse_processar(int _clickX, int _clickY);
 //==========================================================================
