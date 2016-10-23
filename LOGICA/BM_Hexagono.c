@@ -3,6 +3,7 @@
 #include "BM_Allegro_eventos_mouse.h"
 #include "BM_Allegro.h"
 #include "BM_Recursos.h"
+#include "BM_Elemento.h"
 #include <stdarg.h>
 
 //==========================================================================
@@ -21,6 +22,7 @@ const int BM_Sincronia[7][7] = { {0,0,0,0,0,0,0},
 // Prototipos
 //==========================================================================
 void BM_Hexagono_adicionar_listener_mouse(BM_Hexagono *_alvo, int _acao);
+void BM_Hexagono_adicionar_animacao(BM_Hexagono *_alvo);
 //==========================================================================
 
 //==========================================================================
@@ -49,12 +51,19 @@ int BM_Hexagono_batalha(int _alvo, int _atacante) {
 	int resultadoAtaque = 0, resultadoDefesa = 0;
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_Hexagono *hexagonoAtaque, *hexagonoDefesa;
-
+	
 	//======================================================================
 	// Definir os hexagonos de ataque e defesa
 	//======================================================================
 	hexagonoAtaque = &campo->hexagonos[_atacante];
 	hexagonoDefesa = &campo->hexagonos[_alvo];
+	//======================================================================
+
+	//======================================================================
+	// Adicionar animações de batalha nos hexagonos
+	//======================================================================
+	BM_Hexagono_adicionar_animacao(hexagonoAtaque);
+	BM_Hexagono_adicionar_animacao(hexagonoDefesa);
 	//======================================================================
 
 	//======================================================================
@@ -152,5 +161,32 @@ int BM_Hexagono_calcular_sincronia(BM_Hexagono _alvo, int _player) {
 		}
 	}
 	return resultado;
+}
+//==========================================================================
+
+//==========================================================================
+// Adicionar animações de batalha
+//==========================================================================
+void BM_Hexagono_adicionar_animacao(BM_Hexagono *_alvo) {
+	switch (_alvo->elemento)
+	{
+	case LUZ:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_LUZ), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		break;
+	case TREVAS:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_TREVAS), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		break;
+	case FOGO:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_FOGO), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		break;
+	case AGUA:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_AGUA), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		break;
+	case TERRA:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_TERRA), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		break;
+	case AR:
+		BM_Animacao_adicionar(SPRITES(BM_ANI_AR), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+	}
 }
 //==========================================================================

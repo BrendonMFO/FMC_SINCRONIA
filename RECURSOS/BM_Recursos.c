@@ -5,13 +5,14 @@
 //==========================================================================
 // Macros
 //==========================================================================
-#define NEW_SPRITE(INDICE,CAMINHO,LINHA,COLUNA) BM_VETOR_SPRITES[(INDICE)] = carregar_sprite((CAMINHO), (LINHA), (COLUNA))
+#define NEW_SPRITE(CAMINHO,LINHA,COLUNA) BM_VETOR_SPRITES[indexSprite] = carregar_sprite((CAMINHO), (LINHA), (COLUNA))
 //==========================================================================
 
 //==========================================================================
 // Variaveis globais com os recursos disponiveis
 //==========================================================================
 BM_SPRITES *BM_VETOR_SPRITES[QUANTIDADE_SPRITES];
+int indexSprite = -1;
 //==========================================================================
 
 //==========================================================================
@@ -35,13 +36,18 @@ BM_SPRITES *BM_Recursos_obter_recurso(int _indice)
 //==========================================================================
 int BM_Recursos_carregar_Sprites()
 {
-	NEW_SPRITE(0,"Recursos\\Fases\\Mapa_01.bmp", 1, 1);
-	NEW_SPRITE(1,"Recursos\\Sprites\\Hexagono_1.png", 7, 3);
-	NEW_SPRITE(2, "Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
-	NEW_SPRITE(3, "Recursos\\Sprites\\Player.png", 1, 1);
-	NEW_SPRITE(4, "Recursos\\Sprites\\Hexagono_Alvo.png", 1, 1);
-	NEW_SPRITE(5, "Recursos\\Sprites\\Elementos.png", 1, 6);
-	NEW_SPRITE(6, "Recursos\\Sprites\\IA.png", 1, 1);
+	NEW_SPRITE("Recursos\\Fases\\Mapa_01.bmp", 1, 1);
+	NEW_SPRITE("Recursos\\Sprites\\Hexagono_1.png", 7, 3);
+	NEW_SPRITE("Recursos\\Sprites\\Player.png", 1, 1);
+	NEW_SPRITE("Recursos\\Sprites\\Hexagono_Alvo.png", 1, 1);
+	NEW_SPRITE("Recursos\\Sprites\\Elementos.png", 1, 6);
+	NEW_SPRITE("Recursos\\Sprites\\IA.png", 1, 1);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\light_004.png", 5, 5);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\darkness_002.png", 6, 5);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\fire_002.png", 5, 5);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\earth_002.png", 4, 5);
+	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\wind_003.png", 6, 5);
 	return checarArquivos();
 }
 //==========================================================================
@@ -56,6 +62,7 @@ BM_SPRITES *carregar_sprite(char *_arquivo, int _framesLinhas, int _framesColuna
 		fprintf(stderr, "Erro ao carregar Sprite : %s\n", _arquivo);
 		return NULL;
 	}
+	indexSprite++;
 	return temp;
 }
 //==========================================================================

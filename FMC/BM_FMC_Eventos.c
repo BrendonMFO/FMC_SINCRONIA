@@ -70,7 +70,6 @@ void BM_Hexagono_alvo(void) {
 		 if (mouse != NULL) {
 			 id = *(int*)mouse->opcional;
 			 hexagono = &campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
-			 BM_Animacao_adicionar(SPRITES(BM_IMG_ANI_AGUA), 300, 300, 500, 300, 0.8);
 			 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual))
 			 {
 			 case VITORIA_ATAQUE:

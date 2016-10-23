@@ -7,7 +7,7 @@
 //==========================================================================
 #define ERRO 0
 #define SUCESSO 1
-#define QUANTIDADE_SPRITES 7
+#define QUANTIDADE_SPRITES 12
 #define SPRITES(INDICE) BM_Recursos_obter_recurso((INDICE))
 //==========================================================================
 
