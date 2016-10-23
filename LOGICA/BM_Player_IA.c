@@ -3,6 +3,7 @@
 #include "BM_Player_IA.h"
 #include "BM_Campo.h"
 #include "BM_Hexagono.h"
+#include "BM_Rodadas.h"
 #include <stdio.h>
 
 //==========================================================================
@@ -50,7 +51,7 @@ void BM_IA_conquistar_territorio(int _indexHexagono);
 void BM_IA_atacar(int _indexHexagono);
 void BM_IA_iniciar_arvore(BM_IA_ARVORE *_arvore);
 int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono);
-int BM_IA_arvore_desalocar(BM_IA **_no);
+void BM_IA_arvore_desalocar(BM_IA **_no);
 int BM_IA_arvore_vazia(BM_IA_ARVORE *_arvore);
 BM_IA *BM_IA_executar(BM_IA **_no);
 //==========================================================================
@@ -90,7 +91,7 @@ int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono) {
 //==========================================================================
 // Desalocar arvore
 //==========================================================================
-int BM_IA_arvore_desalocar(BM_IA **_no) {
+void BM_IA_arvore_desalocar(BM_IA **_no) {
 	if ((*_no) != NULL) {
 		if ((*_no)->direita == NULL && (*_no)->esquerda == NULL && (*_no)->centro == NULL)
 			return free((*_no));
@@ -233,6 +234,7 @@ void BM_IA_disparar() {
 	BM_IA_arvore_desalocar(&arvoreConquista.raiz);
 	//======================================================================
 
+	BM_Rodada_set(BM_Rodada_get_restantes() - 1);
 }
 //==========================================================================
 
@@ -314,9 +316,13 @@ void BM_IA_atacar(int _indexHexagono) {
 	{
 	case VITORIA_ATAQUE:
 		campo->hexagonos[hexagono->conexoes[i]].estado = ADVERSARIO;
+		BM_Player_getIAPlayer()->quantidadeTerritorio++;
+		BM_Player_getJogador()->quantidadeTerritorio--;
 		break;
 	case VITORIA_DEFESA:
 		campo->hexagonos[ia->hexagonoAtual].estado = JOGADOR;
+		BM_Player_getIAPlayer()->quantidadeTerritorio--;
+		BM_Player_getJogador()->quantidadeTerritorio++;
 	}
 }
 //==========================================================================

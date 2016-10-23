@@ -5,6 +5,7 @@
 #include "BM_Elemento.h"
 #include "BM_Player_IA.h"
 #include "BM_Recursos_Animacao.h"
+#include "BM_Rodadas.h"
 
 //==========================================================================
 // Prototipos
@@ -18,7 +19,9 @@ void BM_Elemento_escolha(void);
 // Evento inicial
 //==========================================================================
 void BM_FMC_Evento_inicial() {
+	BM_Rodada_set(50);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+	BM_Render_adicionar_funcao(BM_Render_rodada);
 }
 //==========================================================================
 

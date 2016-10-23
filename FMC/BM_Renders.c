@@ -1,9 +1,10 @@
 #include "BM_Renders.h"
 #include "BM_Recursos.h"
-#include "BM_Recursos_Sprites.h"
+#include "BM_Recursos_Conteudo.h"
 #include "BM_Recursos_Animacao.h"
 #include "BM_Player.h"
 #include "BM_Player_IA.h"
+#include "BM_Rodadas.h"
 #include "BM_Campo.h"
 
 //=========================================================================
@@ -214,6 +215,14 @@ void BM_Render_elementos(void *_parametro, ...) {
 		destinoX = 196 + (sourceW * i);
 		al_draw_bitmap_region(SPRITES(BM_IMG_ELEMENTOS)->Imagem, sourceX, 0, sourceW, sourceH, destinoX, 266, 0);
 	}
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar Rodada
+//==========================================================================
+void BM_Render_rodada(void *_parametro, ...) {
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), 800, 15, ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
 }
 //==========================================================================
 

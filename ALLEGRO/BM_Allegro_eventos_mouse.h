@@ -42,7 +42,7 @@ int BM_Eventos_Mouse_iniciar_fila_mouse();
 //==========================================================================
 // Adicionar funcao na pilha
 //==========================================================================
-int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, char *_opcional);
+int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _fX, int _fY, void *_opcional);
 //==========================================================================
 
 //==========================================================================

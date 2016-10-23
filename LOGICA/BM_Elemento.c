@@ -6,7 +6,7 @@
 // Adicionar elementos para a fila de eventos do mouse
 //==========================================================================
 void BM_Elemento_adicionar_mouse_listener() {
-	int sourceW, sourceH, sourceX, destinoX, i;
+	int sourceW, sourceH, destinoX, i;
 	for (i = 0; i < 6; i++) {
 		int *id = (int*)malloc(1 * sizeof(int));
 		*id = i + 1;

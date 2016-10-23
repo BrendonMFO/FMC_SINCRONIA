@@ -33,6 +33,9 @@
     <ClInclude Include="BM_Player_IA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BM_Rodadas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BM_Elemento.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BM_Rodadas.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

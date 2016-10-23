@@ -18,13 +18,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BM_Recursos_Sprites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BM_Recursos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BM_Recursos_Animacao.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BM_Recursos_Conteudo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

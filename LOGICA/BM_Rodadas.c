@@ -1,37 +1,27 @@
-#pragma once
-
-#include "BM_Allegro_Imagens.h"
-
-//==========================================================================
-// Definir constantes
-//==========================================================================
-#define Imagem imagem->bitmap
-//==========================================================================
+#include "BM_Rodadas.h"
+#include "BM_Player.h"
+#include "BM_Player_IA.h"
+#include "BM_Recursos_Conteudo.h"
+#include "BM_Recursos.h"
 
 //==========================================================================
-// Estrutura de dados dos sprites
+// Variaveis
 //==========================================================================
-typedef struct BM_SPRITES_S {
-	BM_IMAGEM *imagem;
-}BM_SPRITES;
+int RODADAS_RESTANTES;
 //==========================================================================
 
 //==========================================================================
-// ENUM - Enumeração dos sprites disponiveis
+// Set Rodadas
 //==========================================================================
-enum ENUM_SPRITES
-{
-	BM_IMG_MAPA_01,
-	BM_IMG_HEXAGONO,
-	BM_IMG_PLAYER,
-	BM_IMG_HEXAGONO_ALVO,
-	BM_IMG_ELEMENTOS,
-	BM_IMG_PLAYER_IA,
-	BM_ANI_LUZ,
-	BM_ANI_TREVAS,
-	BM_ANI_FOGO,
-	BM_ANI_AGUA,
-	BM_ANI_TERRA,
-	BM_ANI_AR
-};
+int BM_Rodada_set(int _quantidade) {
+	RODADAS_RESTANTES = _quantidade;
+}
+//==========================================================================
+
+//==========================================================================
+// Get Rodadas restantes
+//==========================================================================
+int BM_Rodada_get_restantes() {
+	return RODADAS_RESTANTES;
+}
 //==========================================================================

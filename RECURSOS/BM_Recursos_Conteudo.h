@@ -1,32 +1,45 @@
 #pragma once
 
-#include "BM_Recursos_Conteudo.h"
-#include "BM_Allegro.h"
+#include "BM_Allegro_Imagens.h"
 
 //==========================================================================
-// Constantes
+// Definir constantes
 //==========================================================================
-#define ERRO 0
-#define SUCESSO 1
-#define QUANTIDADE_SPRITES 12
-#define QUANTIDADE_FONTES 1
-#define SPRITES(INDICE) BM_Recursos_obter_recurso((INDICE))
+#define Imagem imagem->bitmap
 //==========================================================================
 
 //==========================================================================
-// Obter array com os recursos visuais carregados
+// Estrutura de dados dos sprites
 //==========================================================================
-BM_SPRITES *BM_Recursos_obter_recurso(int _indice);
-//==========================================================================
-
-//==========================================================================
-// Obter fonte
-//==========================================================================
-ALLEGRO_FONT *BM_Recursos_obter_fonte(int _indice);
+typedef struct BM_SPRITES_S {
+	BM_IMAGEM *imagem;
+}BM_SPRITES;
 //==========================================================================
 
 //==========================================================================
-// Carregar Sprites
+// ENUM - Enumeração dos sprites disponiveis
 //==========================================================================
-int BM_Recursos_carregar_recursos();
+enum ENUM_SPRITES
+{
+	BM_IMG_MAPA_01,
+	BM_IMG_HEXAGONO,
+	BM_IMG_PLAYER,
+	BM_IMG_HEXAGONO_ALVO,
+	BM_IMG_ELEMENTOS,
+	BM_IMG_PLAYER_IA,
+	BM_ANI_LUZ,
+	BM_ANI_TREVAS,
+	BM_ANI_FOGO,
+	BM_ANI_AGUA,
+	BM_ANI_TERRA,
+	BM_ANI_AR
+};
+//==========================================================================
+
+//==========================================================================
+// ENUM = Enumeração das fontes disponiveis
+//==========================================================================
+enum ENUM_FONTES {
+	BM_FONTE_ALBA
+};
 //==========================================================================

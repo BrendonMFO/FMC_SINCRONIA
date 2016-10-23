@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BM_Recursos_Sprites.h"
+#include "BM_Recursos_Conteudo.h"
 
 //==========================================================================
 // Constantes

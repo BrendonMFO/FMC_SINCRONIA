@@ -4,6 +4,7 @@
 #include "BM_Allegro.h"
 #include "BM_Recursos.h"
 #include "BM_Elemento.h"
+#include "BM_Recursos_Animacao.h"
 #include <stdarg.h>
 
 //==========================================================================

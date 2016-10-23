@@ -1,5 +1,6 @@
 #include "BM_Loop_principal.h"
 #include "BM_Allegro_eventos.h"
+#include "BM_Renders.h"
 #include "BM_FMC_Eventos.h"
 
 //==========================================================================

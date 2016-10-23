@@ -141,6 +141,7 @@
     <ClInclude Include="BM_Hexagono.h" />
     <ClInclude Include="BM_Player.h" />
     <ClInclude Include="BM_Player_IA.h" />
+    <ClInclude Include="BM_Rodadas.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Campo.c" />
@@ -148,6 +149,7 @@
     <ClCompile Include="BM_Hexagono.c" />
     <ClCompile Include="BM_Player.c" />
     <ClCompile Include="BM_Player_IA.c" />
+    <ClCompile Include="BM_Rodadas.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

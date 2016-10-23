@@ -150,7 +150,7 @@
   <ItemGroup>
     <ClInclude Include="BM_Recursos_Animacao.h" />
     <ClInclude Include="BM_Recursos.h" />
-    <ClInclude Include="BM_Recursos_Sprites.h" />
+    <ClInclude Include="BM_Recursos_Conteudo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BM_Recursos_Animacao.c" />
