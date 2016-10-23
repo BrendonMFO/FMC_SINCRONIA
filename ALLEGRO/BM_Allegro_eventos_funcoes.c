@@ -41,7 +41,7 @@ int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao) {
 	aux->ativo = ATIVO;
 	aux->funcao = _funcao;
 	aux->proximo = NULL;
-	if (BM_Fila_eventos->fim == BM_Fila_eventos->inicio) {
+	if (BM_Fila_eventos->fim == NULL) {
 		BM_Fila_eventos->inicio = aux;
 		BM_Fila_eventos->fim = aux;
 		aux->anterior = NULL;

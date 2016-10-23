@@ -37,7 +37,7 @@ int BM_FMC_carregar_recursos() {
 // Carregar informações do campo
 //==========================================================================
 int BM_FMC_carregar_campo() {
-	BM_Campo_setCampo("MAPA.gf");
+	BM_Campo_setCampo("Recursos\\Fases\\Mapa_01.gf");
 	if (BM_Campo_getCampo() == NULL) {
 		return ERRO;
 	}

@@ -1,7 +1,7 @@
 Grafos = 21
 X : 39 Y : 384 Conexoes : [ -1 2 1 -1 -1 -1 ]
 X : 217 Y : 485 Conexoes : [ 2 5 4 3 -1 0 ]
-X : 215 Y : 278 Conexoes : [ -1 -1 5 1 5 -1 ]
+X : 215 Y : 278 Conexoes : [ -1 -1 5 1 0 -1 ]
 X : 222 Y : 691 Conexoes : [ 1 4 -1 -1 -1 -1 ]
 X : 397 Y : 585 Conexoes : [ 5 7 8 -1 3 1 ]
 X : 393 Y : 379 Conexoes : [ -1 6 7 4 1 2 ]

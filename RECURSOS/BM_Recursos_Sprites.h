@@ -26,6 +26,7 @@ enum ENUM_SPRITES
 	BM_IMG_ANI_AGUA,
 	BM_IMG_PLAYER,
 	BM_IMG_HEXAGONO_ALVO,
-	BM_IMG_ELEMENTOS
+	BM_IMG_ELEMENTOS,
+	BM_IMG_PLAYER_IA
 };
 //==========================================================================

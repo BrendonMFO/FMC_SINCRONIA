@@ -44,7 +44,7 @@ int BM_Animacao_iniciar_fila() {
 //==========================================================================
 // Adicionar animação na lista 25 / 60
 //==========================================================================
-int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, double _tempo) {
+int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderW, int _renderH, int _renderX, int _renderY, double _tempo) {
 	BM_ANIMACAO *aux = (BM_ANIMACAO*)malloc(1 * sizeof(BM_ANIMACAO));
 	if (aux == NULL) {
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para uma animacao\n");
@@ -53,8 +53,10 @@ int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, doubl
 	aux->sprite = _sprite;
 	aux->frameAtualColuna = 0;
 	aux->frameAtualLinha = 0;
-	aux->renderX = _renderX;
-	aux->renderY = _renderY;
+	aux->destinoW = _renderW;
+	aux->destinoH = _renderH;
+	aux->destinoX = _renderX;
+	aux->destinoY = _renderY;
 	aux->finalizado = NAO;
 	aux->render = NAO;
 	aux->anterior = NULL;

@@ -84,7 +84,7 @@ void carregarHexagonos(BM_Hexagono *_hexagonos, FILE *_arquivo, int _quantidadeL
 	time_t t;
 	srand((unsigned)time(&t));
 	for (contador = 0; contador < _quantidadeLinhas; contador++) {
-		_hexagonos[contador] = BM_Hexagono_criar(contador, numeroAleatorio(3), numeroAleatorio(7));
+		_hexagonos[contador] = BM_Hexagono_criar(contador, NEUTRO, numeroAleatorio(7));
 		fscanf(_arquivo, "X : %d Y : %d Conexoes : [ %d %d %d %d %d %d ]\n", 
 			&_hexagonos[contador].posicaoX,
 			&_hexagonos[contador].posicaoY,

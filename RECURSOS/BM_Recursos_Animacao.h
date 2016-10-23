@@ -19,9 +19,11 @@ typedef struct BM_ANIMACAO_S
 	BM_SPRITES *sprite;
 	int frameAtualLinha;
 	int frameAtualColuna;
-	int renderX;
-	int renderY;
 	int render;
+	int destinoW;
+	int destinoH;
+	int destinoX;
+	int destinoY;
 	int tempoAtualizacao;
 	int tempoAtual;
 	int finalizado;
@@ -55,7 +57,7 @@ int BM_Animacao_iniciar_fila();
 //==========================================================================
 // Adicionar animação
 //==========================================================================
-int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderX, int _renderY, double _tempo);
+int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderW, int _renderH, int _renderX, int _renderY, double _tempo);
 //==========================================================================
 
 //==========================================================================

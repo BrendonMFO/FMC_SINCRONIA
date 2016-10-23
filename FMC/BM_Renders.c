@@ -3,14 +3,15 @@
 #include "BM_Recursos_Sprites.h"
 #include "BM_Recursos_Animacao.h"
 #include "BM_Player.h"
+#include "BM_Player_IA.h"
 #include "BM_Campo.h"
 
 //=========================================================================
 // Macros
 //=========================================================================
 #define RENDER_IMG(IMG,X,Y,FLAG) (al_draw_bitmap(SPRITES((IMG))->Imagem, (X), (Y), (FLAG)))
-#define RENDER_REGION_SPRITE (SPRITE,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region((SPRITE),(SX),(SY),(SW),(SH),(DX),(DY),(F)))
 #define RENDER_REGION(IMG,SX,SY,SW,SH,DX,DY,F) (al_draw_bitmap_region(SPRITES((IMG))->Imagem,(SX),(SY),(SW),(SH),(DX),(DY),(F)))
+#define RENDER_REGION_SCALED(IMG,SX,SY,SW,SH,DX,DY,DW,DH,F) (al_draw_scaled_bitmap((IMG),(SX),(SY),(SW),(SH),(DX),(DY),(DW),(DH),(F)))
 //=========================================================================
 
 //==========================================================================
@@ -25,6 +26,7 @@ BM_RENDER_FILA *renderFila = NULL;
 void BM_Render_campo();
 void BM_Render_animacao();
 void BM_Render_player();
+void BM_Render_player_ia();
 void BM_Render_hexagono(BM_Hexagono _hexagono);
 void BM_Render_renderizar_fila();
 BM_RENDER *BM_Render_procurar_fila(BM_RENDER_FUNCAO _funcao);
@@ -36,9 +38,10 @@ BM_RENDER *BM_Render_procurar_fila(BM_RENDER_FUNCAO _funcao);
 void BM_Render_principal() {
 	RENDER_IMG(BM_IMG_MAPA_01, 0, 0, 0);
 	BM_Render_campo();
-	BM_Render_animacao();
 	BM_Render_player();
+	BM_Render_player_ia();
 	BM_Render_renderizar_fila();
+	BM_Render_animacao();
 	al_flip_display();
 }
 //==========================================================================
@@ -126,10 +129,12 @@ void BM_Render_campo() {
 //==========================================================================
 void BM_Render_hexagono(BM_Hexagono _hexagono)
 {
-	int sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesColunas;
-	int sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesLinhas;
-	int sourceX = sourceW * _hexagono.estado;
-	int sourceY = sourceH * _hexagono.elemento;
+	int sourceW, sourceH, sourceX, sourceY;
+	sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesColunas;
+	sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesLinhas;
+	sourceX = sourceW * _hexagono.estado;
+	if (_hexagono.visivel == TRUE || _hexagono.estado == JOGADOR) sourceY = sourceH * _hexagono.elemento;
+	else sourceY = 0;
 	RENDER_REGION(BM_IMG_HEXAGONO, sourceX, sourceY, sourceW, sourceH, _hexagono.posicaoX, _hexagono.posicaoY, 0);
 	if (_hexagono.alvo == TRUE) 
 		RENDER_IMG(BM_IMG_HEXAGONO_ALVO, _hexagono.posicaoX, _hexagono.posicaoY, 0);
@@ -141,13 +146,13 @@ void BM_Render_hexagono(BM_Hexagono _hexagono)
 //==========================================================================
 void BM_Render_animacao() {
 	BM_ANIMACAO *aux;
-	int sourceW, sourceH, sourceX, sourceY;
+	int sourceW, sourceH, sourceX, sourceY, destinoW, destinoH;
 	for (aux = BM_Animacao_obter_fila()->inicio; aux != NULL; aux = aux->proximo) {
 		sourceW = BM_Allegro_largura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesColunas;
 		sourceH = BM_Allegro_altura_da_imagem(aux->sprite->Imagem) / aux->sprite->imagem->framesLinhas;
 		sourceX = sourceW * aux->frameAtualColuna;
 		sourceY = sourceH * aux->frameAtualLinha;
-		RENDER_REGION(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->renderX, aux->renderY, 0);
+		RENDER_REGION_SCALED(aux->sprite->Imagem, sourceX, sourceY, sourceW, sourceH, aux->destinoX, aux->destinoY, aux->destinoW, aux->destinoH, 0);
 		if (aux->render == SIM) {
 			aux->render = NAO;
 			BM_Animacao_avancar(aux);
@@ -180,6 +185,19 @@ void BM_Render_player() {
 	destinoX = (sourceW / 2) + BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].posicaoX;
 	destinoY = (sourceH / 6) + BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].posicaoY;
 	RENDER_REGION(BM_IMG_PLAYER, 0, 0, sourceW, sourceH, destinoX, destinoY, 0);
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar players
+//==========================================================================
+void BM_Render_player_ia() {
+	int sourceW, sourceH, destinoX, destinoY;
+	sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_PLAYER_IA)->Imagem);
+	sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_PLAYER_IA)->Imagem);
+	destinoX = (sourceW / 2) + BM_Campo_getCampo()->hexagonos[BM_Player_getIAPlayer()->hexagonoAtual].posicaoX;
+	destinoY = (sourceH / 6) + BM_Campo_getCampo()->hexagonos[BM_Player_getIAPlayer()->hexagonoAtual].posicaoY;
+	RENDER_REGION(BM_IMG_PLAYER_IA, 0, 0, sourceW, sourceH, destinoX, destinoY, 0);
 }
 //==========================================================================
 

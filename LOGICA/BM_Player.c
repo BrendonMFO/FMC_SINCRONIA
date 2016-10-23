@@ -66,6 +66,7 @@ void iniciarValores(BM_PLAYER *_player, int _hexagono) {
 	_player->elementosQuantidade.agua = _player->elementosNivel.agua = 0;
 	_player->elementosQuantidade.terra = _player->elementosNivel.terra = 0;
 	_player->elementosQuantidade.ar = _player->elementosNivel.ar = 0;
+	BM_Campo_getCampo()->hexagonos[0].estado = JOGADOR;
 }
 //==========================================================================
 

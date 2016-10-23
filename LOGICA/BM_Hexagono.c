@@ -24,70 +24,11 @@ void BM_Hexagono_adicionar_listener_mouse(BM_Hexagono *_alvo, int _acao);
 //==========================================================================
 
 //==========================================================================
-// Iniciar fila hexagonos
-//==========================================================================
-BM_FILA_HEXAGONO *BM_Hexagono_iniciar_fila() {
-	BM_FILA_HEXAGONO *_fila = (BM_FILA_HEXAGONO*)malloc(1 * sizeof(BM_FILA_HEXAGONO));
-	if (_fila == NULL) {
-		printf("ERRO: nao foi possivel alocar memoria para a fila de hexagonos");
-		return NULL;
-	}
-	_fila->inicio = NULL;
-	_fila->fim = NULL;
-	return _fila;
-}
-//==========================================================================
-
-//==========================================================================
-// Adicionar hexagono na fila
-//==========================================================================
-int BM_Hexagono_fila_inserir(BM_FILA_HEXAGONO *_fila, BM_Hexagono _hexagono) {
-	_hexagono.proximo = NULL;
-	if (_fila->inicio == NULL) {
-		_fila->inicio = &_hexagono;
-		_fila->fim = &_hexagono;
-		_hexagono.proximo = NULL;
-	}
-	else
-	{
-		_fila->inicio->anterior = &_hexagono;
-		_hexagono.proximo = _fila->inicio;
-		_fila->inicio = &_hexagono;
-	}
-	return SUCESSO;
-}
-//==========================================================================
-
-//==========================================================================
-// Remover hexagono da fila
-//==========================================================================
-int BM_Hexagono_fila_remover(BM_FILA_HEXAGONO *_fila, BM_Hexagono *_hexagono) {
-	if (_fila->inicio == _fila->fim) {
-		_fila->inicio = NULL;
-		_fila->fim = NULL;
-	}
-	else {
-		if (_hexagono->anterior != NULL)
-			_hexagono->anterior->proximo = _hexagono->proximo;
-		else
-			_fila->inicio = _hexagono->proximo;
-		if (_hexagono->proximo != NULL)
-			_hexagono->proximo->anterior = _hexagono->anterior;
-		else
-			_fila->fim = _hexagono->anterior;
-	}
-	free(_hexagono);
-}
-//==========================================================================
-
-//==========================================================================
 // Criar Hexagono
 //==========================================================================
 BM_Hexagono BM_Hexagono_criar(int _id, int _estado, int _elemento)
 {
 	BM_Hexagono temp = { _id, _estado, _elemento, FALSE, FALSE };
-	temp.anterior = NULL;
-	temp.proximo = NULL;
 	return temp;
 }
 //==========================================================================
@@ -107,25 +48,38 @@ void BM_Hexagono_alterar(BM_Hexagono *_hexagono, int _estado, int _elemento) {
 int BM_Hexagono_batalha(int _alvo, int _atacante) {
 	int resultadoAtaque = 0, resultadoDefesa = 0;
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono hexagonoAtaque, hexagonoDefesa;
+	BM_Hexagono *hexagonoAtaque, *hexagonoDefesa;
 
-	hexagonoAtaque = campo->hexagonos[_atacante];
-	hexagonoDefesa = campo->hexagonos[_alvo];
+	//======================================================================
+	// Definir os hexagonos de ataque e defesa
+	//======================================================================
+	hexagonoAtaque = &campo->hexagonos[_atacante];
+	hexagonoDefesa = &campo->hexagonos[_alvo];
+	//======================================================================
+
+	//======================================================================
+	// Setar hexagonos visiveis
+	//======================================================================
+	hexagonoAtaque->visivel = TRUE;
+	hexagonoDefesa->visivel = TRUE;
+	//======================================================================
 
 	//======================================================================
 	// Verificar se ha alguma superioridade de sincronia entre os hexagonos
 	//======================================================================
-	if (BM_Sincronia[hexagonoAtaque.elemento][hexagonoDefesa.elemento] == 2)
+	if (BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento] == 2)
 		resultadoAtaque += 4;
-	else if (BM_Sincronia[hexagonoAtaque.elemento][hexagonoDefesa.elemento] == -2)
+	else if (BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento] == -2)
 		resultadoDefesa += 4;
+	else
+		resultadoAtaque += BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento];
 	//======================================================================
 
 	//======================================================================
 	// Calcular poder das sincronias
 	//======================================================================
-	resultadoAtaque += BM_Hexagono_calcular_sincronia(hexagonoAtaque, JOGADOR);
-	resultadoDefesa += BM_Hexagono_calcular_sincronia(hexagonoDefesa, ADVERSARIO);
+	resultadoAtaque += BM_Hexagono_calcular_sincronia(*hexagonoAtaque, JOGADOR);
+	resultadoDefesa += BM_Hexagono_calcular_sincronia(*hexagonoDefesa, ADVERSARIO);
 	//======================================================================
 
 	//======================================================================

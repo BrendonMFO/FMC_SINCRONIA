@@ -35,12 +35,13 @@ BM_SPRITES *BM_Recursos_obter_recurso(int _indice)
 //==========================================================================
 int BM_Recursos_carregar_Sprites()
 {
-	NEW_SPRITE(0,"Mapa_01.bmp", 1, 1);
-	NEW_SPRITE(1,"Hexagono_1.png", 7, 3);
+	NEW_SPRITE(0,"Recursos\\Fases\\Mapa_01.bmp", 1, 1);
+	NEW_SPRITE(1,"Recursos\\Sprites\\Hexagono_1.png", 7, 3);
 	NEW_SPRITE(2, "Recursos\\Sprites\\Animacoes\\water_005.png", 6, 5);
 	NEW_SPRITE(3, "Recursos\\Sprites\\Player.png", 1, 1);
 	NEW_SPRITE(4, "Recursos\\Sprites\\Hexagono_Alvo.png", 1, 1);
 	NEW_SPRITE(5, "Recursos\\Sprites\\Elementos.png", 1, 6);
+	NEW_SPRITE(6, "Recursos\\Sprites\\IA.png", 1, 1);
 	return checarArquivos();
 }
 //==========================================================================
@@ -52,7 +53,7 @@ BM_SPRITES *carregar_sprite(char *_arquivo, int _framesLinhas, int _framesColuna
 	BM_SPRITES *temp = (BM_SPRITES*)malloc(1 * sizeof(BM_SPRITES));
 	temp->imagem = BM_Allegro_carregar_imagem(_arquivo, _framesLinhas, _framesColunas);
 	if (temp->imagem == NULL) {
-		fprintf(stderr, "Erro ao carregar Sprite : %s", _arquivo);
+		fprintf(stderr, "Erro ao carregar Sprite : %s\n", _arquivo);
 		return NULL;
 	}
 	return temp;

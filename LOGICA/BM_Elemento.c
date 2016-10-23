@@ -7,7 +7,7 @@
 //==========================================================================
 void BM_Elemento_adicionar_mouse_listener() {
 	int sourceW, sourceH, sourceX, destinoX, i;
-	for (i = 0; i <= 6; i++) {
+	for (i = 0; i < 6; i++) {
 		int *id = (int*)malloc(1 * sizeof(int));
 		*id = i + 1;
 		sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_ELEMENTOS)->Imagem) / SPRITES(BM_IMG_ELEMENTOS)->imagem->framesColunas;
@@ -23,7 +23,7 @@ void BM_Elemento_adicionar_mouse_listener() {
 //==========================================================================
 void BM_Elemento_remover_mouse_listener() {
 	int sourceW, sourceH, sourceX, destinoX, i;
-	for (i = 0; i <= 6; i++) {
+	for (i = 0; i < 6; i++) {
 		sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_ELEMENTOS)->Imagem) / SPRITES(BM_IMG_ELEMENTOS)->imagem->framesColunas;
 		sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_ELEMENTOS)->Imagem) / SPRITES(BM_IMG_ELEMENTOS)->imagem->framesLinhas;
 		sourceX = sourceW * i;

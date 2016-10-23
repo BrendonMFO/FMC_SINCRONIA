@@ -76,7 +76,7 @@ void BM_Eventos_iniciarListenerEventos() {
 int BM_Eventos_processar() {
 	int tem_eventos = al_wait_for_event_until(BM_Loop_filaEventos, &BM_Loop_evento, &BM_Loop_timeout);
 	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)	return FECHAR_JOGO;
-	if (tem_eventos) BM_Eventos_executarFilaFuncoes();
+	BM_Eventos_executarFilaFuncoes();
 	return LOOP;
 }
 //==========================================================================
