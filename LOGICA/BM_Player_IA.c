@@ -126,7 +126,7 @@ BM_IA *BM_IA_executar(BM_IA **_no) {
 			return BM_IA_executar(&(*_no)->direita);
 		else if((*_no)->centro != NULL && escolha > 40 && escolha >= 70)
 			return BM_IA_executar(&(*_no)->centro);
-		else if ((*_no)->esquerda != NULL && escolha > 60 && escolha <= 90)
+		else if ((*_no)->esquerda != NULL && escolha > 70 && escolha <= 90)
 			return BM_IA_executar(&(*_no)->esquerda);
 		else
 			return (*_no);
@@ -314,17 +314,20 @@ void BM_IA_conquistar_territorio(int _indexHexagono) {
 void BM_IA_atacar(int _indexHexagono) {
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_HEXAGONO *hexagono = &campo->hexagonos[_indexHexagono];
-	int i;
+	int i, possibilidade[6], contador = 0;
 	ia->hexagonoAtual = hexagono->id;
 	for (i = 0; i < 6; i++) {
 		if (hexagono->conexoes[i] != -1)
-			if (campo->hexagonos[hexagono->conexoes[i]].estado == JOGADOR)
-				break;
+			if (campo->hexagonos[hexagono->conexoes[i]].estado == JOGADOR) {
+				possibilidade[contador] = campo->hexagonos[hexagono->conexoes[i]].id;
+				contador++;
+			}
 	}
-	switch (BM_Hexagono_batalha(hexagono->conexoes[i], _indexHexagono))
+	i = rand() % contador;
+	switch (BM_Hexagono_batalha(campo->hexagonos[possibilidade[i]].id, _indexHexagono))
 	{
 	case VITORIA_ATAQUE:
-		campo->hexagonos[hexagono->conexoes[i]].estado = ADVERSARIO;
+		campo->hexagonos[possibilidade[i]].estado = ADVERSARIO;
 		BM_Player_getIAPlayer()->quantidadeTerritorio++;
 		BM_Player_getJogador()->quantidadeTerritorio--;
 		break;
