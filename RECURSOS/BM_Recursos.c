@@ -62,7 +62,7 @@ int BM_Recursos_carregar_sprite() {
 	NEW_SPRITE("Recursos\\Fases\\Mapa_01.bmp", 1, 1);
 	NEW_SPRITE("Recursos\\Sprites\\Hexagono_1.png", 7, 3);
 	NEW_SPRITE("Recursos\\Sprites\\Player.png", 1, 1);
-	NEW_SPRITE("Recursos\\Sprites\\Hexagono_Alvo.png", 1, 1);
+	NEW_SPRITE("Recursos\\Sprites\\Hexagono_Alvo.png", 1, 5);
 	NEW_SPRITE("Recursos\\Sprites\\Elementos.png", 1, 6);
 	NEW_SPRITE("Recursos\\Sprites\\IA.png", 1, 1);
 	NEW_SPRITE("Recursos\\Sprites\\Animacoes\\light_004.png", 5, 5);

@@ -10,7 +10,7 @@ char *nome_campo;
 //==========================================================================
 // Prototipos
 //==========================================================================
-void carregarHexagonos(BM_Hexagono *_hexagonos, FILE *_arquivo, int _quantidadeLinhas);
+void carregarHexagonos(BM_HEXAGONO *_hexagonos, FILE *_arquivo, int _quantidadeLinhas);
 int numeroAleatorio(int _numero);
 //==========================================================================
 
@@ -54,7 +54,7 @@ BM_Campo *BM_Campo_getCampo()
 		//==================================================================
 		// Criar e Popular lista de hexagonos
 		//==================================================================
-		campo->hexagonos = (BM_Hexagono*)malloc(campo->quantidade * sizeof(BM_Hexagono));
+		campo->hexagonos = (BM_HEXAGONO*)malloc(campo->quantidade * sizeof(BM_HEXAGONO));
 		if (campo->hexagonos == NULL) {
 			fprintf(stderr, "ERRO: nao foi possivel montar os hexagonos do campo\n");
 			return NULL;
@@ -79,7 +79,7 @@ void BM_Campo_setCampo(char *_campo) {
 //==========================================================================
 // Popular vetor de hexagonos
 //==========================================================================
-void carregarHexagonos(BM_Hexagono *_hexagonos, FILE *_arquivo, int _quantidadeLinhas) {
+void carregarHexagonos(BM_HEXAGONO *_hexagonos, FILE *_arquivo, int _quantidadeLinhas) {
 	int contador;
 	time_t t;
 	srand((unsigned)time(&t));
@@ -103,5 +103,17 @@ void carregarHexagonos(BM_Hexagono *_hexagonos, FILE *_arquivo, int _quantidadeL
 //==========================================================================
 int numeroAleatorio(int _numero) {
 	return rand() % _numero;
+}
+//==========================================================================
+
+//==========================================================================
+// Redefinir campo
+//==========================================================================
+void BM_Campo_redefinir() {
+	int contador;
+	for (contador = 0; contador < campo->quantidade; contador++) {
+		campo->hexagonos[contador].estado = NEUTRO;
+		campo->hexagonos[contador].elemento = 0;
+	}
 }
 //==========================================================================

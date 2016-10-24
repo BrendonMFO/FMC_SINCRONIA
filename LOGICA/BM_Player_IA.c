@@ -44,15 +44,15 @@ typedef struct BM_IA_ARVORE_S
 //==========================================================================
 // Prototipos
 //==========================================================================
-void iniciarValores_IA(int _hexagono);
 void BM_IA_possibilidade_ataque(BM_IA_ARVORE *_arvore);
 void BM_IA_possibilidade_conquista(BM_IA_ARVORE *_arvore);
 void BM_IA_conquistar_territorio(int _indexHexagono);
 void BM_IA_atacar(int _indexHexagono);
 void BM_IA_iniciar_arvore(BM_IA_ARVORE *_arvore);
-int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono);
 void BM_IA_arvore_desalocar(BM_IA **_no);
+int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono);
 int BM_IA_arvore_vazia(BM_IA_ARVORE *_arvore);
+int BM_IA_checar_elemento();
 BM_IA *BM_IA_executar(BM_IA **_no);
 //==========================================================================
 
@@ -148,7 +148,7 @@ int BM_Player_IA_iniciar(int _hexagonoAtual) {
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um player");
 		return ERRO;
 	}
-	iniciarValores_IA(_hexagonoAtual);
+	BM_IA_iniciar_valores(_hexagonoAtual);
 	//======================================================================
 
 	return SUCESSO;
@@ -167,15 +167,21 @@ BM_PLAYER *BM_Player_getIAPlayer() {
 //==========================================================================
 // Iniciar valores da estrutura de jogadores
 //==========================================================================
-void iniciarValores_IA(int _hexagono) {
+void BM_IA_iniciar_valores(int _hexagono) {
 	ia->hexagonoAtual = _hexagono;
-	ia->quantidadeTerritorio = 0;
-	ia->elementosQuantidade.luz = ia->elementosNivel.luz = 0;
-	ia->elementosQuantidade.trevas = ia->elementosNivel.trevas = 0;
-	ia->elementosQuantidade.fogo = ia->elementosNivel.fogo = 0;
-	ia->elementosQuantidade.agua = ia->elementosNivel.agua = 0;
-	ia->elementosQuantidade.terra = ia->elementosNivel.terra = 0;
-	ia->elementosQuantidade.ar = ia->elementosNivel.ar = 0;
+	ia->quantidadeTerritorio = 1;
+	ia->elementosDisponivel.luz = TRUE;
+	ia->elementosDisponivel.trevas = TRUE;
+	ia->elementosDisponivel.fogo = TRUE;
+	ia->elementosDisponivel.agua = TRUE;
+	ia->elementosDisponivel.terra = TRUE;
+	ia->elementosDisponivel.ar = TRUE;
+	ia->elementosTempo.luz = 0;
+	ia->elementosTempo.trevas = 0;
+	ia->elementosTempo.fogo = 0;
+	ia->elementosTempo.agua = 0;
+	ia->elementosTempo.terra = 0;
+	ia->elementosTempo.ar = 0;
 	BM_Campo_getCampo()->hexagonos[_hexagono].estado = ADVERSARIO;
 }
 //==========================================================================
@@ -234,7 +240,7 @@ void BM_IA_disparar() {
 	BM_IA_arvore_desalocar(&arvoreConquista.raiz);
 	//======================================================================
 
-	BM_Rodada_set(BM_Rodada_get_restantes() - 1);
+	BM_Rodada_avancar();
 }
 //==========================================================================
 
@@ -243,7 +249,7 @@ void BM_IA_disparar() {
 //==========================================================================
 void BM_IA_possibilidade_ataque(BM_IA_ARVORE *_arvore) {
 	int ataqueAtual, i, j;
-	BM_Hexagono *hexagono = NULL;
+	BM_HEXAGONO *hexagono = NULL;
 	BM_Campo *campo = BM_Campo_getCampo();
 	for (j = 0; j < campo->quantidade; j++) {
 		hexagono = &campo->hexagonos[j];
@@ -266,7 +272,7 @@ void BM_IA_possibilidade_ataque(BM_IA_ARVORE *_arvore) {
 //==========================================================================
 void BM_IA_possibilidade_conquista(BM_IA_ARVORE *_arvore) {
 	int i, j, k, sincronia;
-	BM_Hexagono *hexagono, *aux = NULL;
+	BM_HEXAGONO *hexagono, *aux = NULL;
 	BM_Campo *campo = BM_Campo_getCampo();
 	hexagono = &campo->hexagonos[0];
 	for (k = 0; k < campo->quantidade;k++) {
@@ -293,9 +299,12 @@ void BM_IA_possibilidade_conquista(BM_IA_ARVORE *_arvore) {
 //==========================================================================
 void BM_IA_conquistar_territorio(int _indexHexagono) {
 	BM_Campo *campo = BM_Campo_getCampo();
+	int elemento;
 	campo->hexagonos[_indexHexagono].estado = ADVERSARIO;
 	campo->hexagonos[_indexHexagono].visivel = FALSE;
+	campo->hexagonos[_indexHexagono].elemento = BM_IA_checar_elemento();
 	ia->hexagonoAtual = campo->hexagonos[_indexHexagono].id;
+	ia->quantidadeTerritorio++;
 }
 //==========================================================================
 
@@ -304,7 +313,7 @@ void BM_IA_conquistar_territorio(int _indexHexagono) {
 //==========================================================================
 void BM_IA_atacar(int _indexHexagono) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono *hexagono = &campo->hexagonos[_indexHexagono];
+	BM_HEXAGONO *hexagono = &campo->hexagonos[_indexHexagono];
 	int i;
 	ia->hexagonoAtual = hexagono->id;
 	for (i = 0; i < 6; i++) {
@@ -323,6 +332,51 @@ void BM_IA_atacar(int _indexHexagono) {
 		campo->hexagonos[ia->hexagonoAtual].estado = JOGADOR;
 		BM_Player_getIAPlayer()->quantidadeTerritorio--;
 		BM_Player_getJogador()->quantidadeTerritorio++;
+	}
+}
+//==========================================================================
+
+//==========================================================================
+// Checar elemento
+//==========================================================================
+int BM_IA_checar_elemento() {
+	int elementosDisponiveis = 0, ordemElementos[6], vazio = TRUE, *elemento, i, resultado;
+	elemento = &ia->elementosDisponivel.luz;
+	for (i = 0; i < 6; i++, elemento++) {
+		if (*elemento == TRUE) {
+			ordemElementos[elementosDisponiveis++] = i + 1;
+			vazio = FALSE;
+		}
+	}
+	if (vazio == TRUE) {
+		elemento = &ia->elementosDisponivel.luz;
+		for (i = 0; i < 6; i++, elemento++) {
+			*elemento = TRUE;
+		}
+	}
+	resultado = ordemElementos[rand() % elementosDisponiveis];
+	elemento = &ia->elementosDisponivel.luz;
+	elemento[resultado] = FALSE;
+	return ordemElementos[rand() % elementosDisponiveis];
+}
+//==========================================================================
+
+//==========================================================================
+// Checar tempo elemento
+//==========================================================================
+void BM_IA_checar_tempo() {
+	int *elementoTempo, *elemento, i;
+	elementoTempo = &ia->elementosTempo.luz;
+	for (i = 0; i < 6; i++, elementoTempo++) {
+		*elementoTempo++;
+	}
+	elementoTempo = &ia->elementosTempo.luz;
+	elemento = &ia->elementosDisponivel.luz;
+	for (i = 0; i < 6; i++, elementoTempo++, elemento++) {
+		if (*elementoTempo == 4) {
+			*elementoTempo = 0;
+			*elemento = TRUE;
+		}
 	}
 }
 //==========================================================================

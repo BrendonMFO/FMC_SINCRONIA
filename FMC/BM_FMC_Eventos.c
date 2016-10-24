@@ -11,8 +11,10 @@
 // Prototipos
 //==========================================================================
 void BM_Evento_jogador(void);
-void BM_Hexagono_alvo(void);
-void BM_Elemento_escolha(void);
+void BM_Evento_alvo(void);
+void BM_Evento_escolha(void);
+void BM_Evento_reiniciar(void);
+void BM_Jogo_verificar_fim(void);
 //==========================================================================
 
 //==========================================================================
@@ -20,8 +22,25 @@ void BM_Elemento_escolha(void);
 //==========================================================================
 void BM_FMC_Evento_inicial() {
 	BM_Rodada_set(50);
+	BM_Player_iniciar_valores(0);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
 	BM_Render_adicionar_funcao(BM_Render_rodada);
+}
+//==========================================================================
+
+//==========================================================================
+// Verificar se o jogo possue um vencedor
+//==========================================================================
+void BM_Jogo_verificar_fim(void) {
+	BM_PLAYER *a = BM_Player_getJogador();
+	BM_PLAYER *b = BM_Player_getIAPlayer();
+	if (BM_Rodada_get_restantes() == 0 || 
+		BM_Player_getJogador()->quantidadeTerritorio == 0 ||
+		BM_Player_getIAPlayer()->quantidadeTerritorio == 0) {
+		BM_Render_adicionar_funcao(BM_Render_resultado);
+		BM_Eventos_Funcoes_remover(BM_Evento_jogador);
+		BM_Eventos_Funcoes_adicionar(BM_Evento_reiniciar);
+	}
 }
 //==========================================================================
 
@@ -38,9 +57,10 @@ void BM_Evento_jogador(void) {
 		switch (aux.keyboard.keycode) {
 		case ALLEGRO_KEY_A:
 			if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado == JOGADOR) {
-				if (BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, MARCAR) > 0) {
+				if (BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_ALVO) > 0) {
+					BM_Hexagono_marcar_sincronia();
 					BM_Eventos_Funcoes_remover(BM_Evento_jogador);
-					BM_Eventos_Funcoes_adicionar(BM_Hexagono_alvo);
+					BM_Eventos_Funcoes_adicionar(BM_Evento_alvo);
 				}
 			}
 			break;
@@ -49,7 +69,7 @@ void BM_Evento_jogador(void) {
 				BM_Elemento_adicionar_mouse_listener();
 				BM_Render_adicionar_funcao(BM_Render_elementos);
 				BM_Eventos_Funcoes_remover(BM_Evento_jogador);
-				BM_Eventos_Funcoes_adicionar(BM_Elemento_escolha);
+				BM_Eventos_Funcoes_adicionar(BM_Evento_escolha);
 			}
 			break;
 		}
@@ -61,11 +81,11 @@ void BM_Evento_jogador(void) {
 //==========================================================================
 // Eventos quando a opção de ataque esta selecionada
 //==========================================================================
-void BM_Hexagono_alvo(void) {
+void BM_Evento_alvo(void) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	BM_EVENTO_MOUSE *mouse;
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono *hexagono;
+	BM_HEXAGONO *hexagono;
 	int id;
 	switch (aux.type) {
 	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
@@ -76,32 +96,37 @@ void BM_Hexagono_alvo(void) {
 			 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual))
 			 {
 			 case VITORIA_ATAQUE:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, DESMARCAR);
+				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+				 BM_Hexagono_desmarcar_sincronia();
 				 campo->hexagonos[id].estado = JOGADOR;
 				 BM_Player_getJogador()->hexagonoAtual = id;
 				 BM_Player_getJogador()->quantidadeTerritorio++;
 				 BM_Player_getIAPlayer()->quantidadeTerritorio--;
 				 break;
 			 case VITORIA_DEFESA:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, DESMARCAR);
+				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+				 BM_Hexagono_desmarcar_sincronia();
 				 campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = ADVERSARIO;
 				 BM_Player_getJogador()->quantidadeTerritorio--;
 				 BM_Player_getIAPlayer()->quantidadeTerritorio++;
 				 break;
 			 case EMPATE:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, DESMARCAR);
+				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+				 BM_Hexagono_desmarcar_sincronia();
 				 break;
 			 }
-			 BM_Eventos_Funcoes_remover(BM_Hexagono_alvo);
+			 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
 			 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
 			 BM_IA_disparar();
+			 BM_Jogo_verificar_fim();
 		 }
 		break;
 	case ALLEGRO_EVENT_KEY_DOWN:
 		switch (aux.keyboard.keycode) {
 		case ALLEGRO_KEY_A:
-			BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, DESMARCAR);
-			BM_Eventos_Funcoes_remover(BM_Hexagono_alvo);
+			BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+			BM_Hexagono_desmarcar_sincronia();
+			BM_Eventos_Funcoes_remover(BM_Evento_alvo);
 			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
 			break;
 		}
@@ -113,7 +138,7 @@ void BM_Hexagono_alvo(void) {
 //==========================================================================
 // Eventos na tela de seleção de elementos
 //==========================================================================
-void BM_Elemento_escolha(void) {
+void BM_Evento_escolha(void) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_EVENTO_MOUSE *mouse;
@@ -123,13 +148,19 @@ void BM_Elemento_escolha(void) {
 		mouse = BM_Eventos_Mouse_processar(aux.mouse.x, aux.mouse.y);
 		if (mouse != NULL) {
 			elemento = *(int*)mouse->opcional;
-			campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].elemento = elemento;
-			campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = JOGADOR;
-			BM_Elemento_remover_mouse_listener();
-			BM_Render_remover_funcao(BM_Render_elementos);
-			BM_Eventos_Funcoes_remover(BM_Elemento_escolha);
-			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
-			BM_IA_disparar();
+			if (BM_Player_disponibilidade_elemento(elemento) == TRUE) {
+				if (campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado == NEUTRO)
+					BM_Player_getJogador()->quantidadeTerritorio++;
+				BM_Player_checar_elemento(elemento);
+				campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].elemento = elemento;
+				campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = JOGADOR;
+				BM_Elemento_remover_mouse_listener();
+				BM_Render_remover_funcao(BM_Render_elementos);
+				BM_Eventos_Funcoes_remover(BM_Evento_escolha);
+				BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+				BM_IA_disparar();
+				BM_Jogo_verificar_fim();
+			}
 		}
 		break;
 	case ALLEGRO_EVENT_KEY_DOWN:
@@ -137,8 +168,31 @@ void BM_Elemento_escolha(void) {
 		case ALLEGRO_KEY_ESCAPE:
 			BM_Elemento_remover_mouse_listener();
 			BM_Render_remover_funcao(BM_Render_elementos);
-			BM_Eventos_Funcoes_remover(BM_Elemento_escolha);
+			BM_Eventos_Funcoes_remover(BM_Evento_escolha);
 			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+			break;
+		}
+		break;
+	}
+}
+//==========================================================================
+
+//==========================================================================
+// Reiniciar jogo
+//==========================================================================
+void BM_Evento_reiniciar(void) {
+	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
+	switch (aux.type) {
+	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+		break;
+	case ALLEGRO_EVENT_KEY_DOWN:
+		switch (aux.keyboard.keycode) {
+		case ALLEGRO_KEY_R:
+			BM_Campo_redefinir();
+			BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
+			BM_Eventos_Funcoes_remover(BM_Evento_reiniciar);
+			BM_Render_remover_funcao(BM_Render_resultado);
+			BM_FMC_Evento_inicial();
 			break;
 		}
 		break;

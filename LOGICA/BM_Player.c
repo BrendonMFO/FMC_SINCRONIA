@@ -22,8 +22,8 @@ BM_PLAYER *jogador = NULL;
 //==========================================================================
 // Prototipos
 //==========================================================================
-void iniciarValores(BM_PLAYER *_player, int _hexagono);
 void BM_Player_mover(BM_PLAYER *_player, int _mouseX, int _mouseY);
+void BM_Player_elementos();
 //==========================================================================
 
 //==========================================================================
@@ -39,7 +39,7 @@ int BM_Player_iniciar(int _hexagonoInicialJogador)
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um player");
 		return ERRO;
 	}
-	iniciarValores(jogador, _hexagonoInicialJogador);
+	BM_Player_iniciar_valores(_hexagonoInicialJogador);
 	//======================================================================
 
 	return SUCESSO;
@@ -57,16 +57,80 @@ BM_PLAYER *BM_Player_getJogador() {
 //==========================================================================
 // Iniciar valores da estrutura de jogadores
 //==========================================================================
-void iniciarValores(BM_PLAYER *_player, int _hexagono) {
-	_player->hexagonoAtual = _hexagono;
-	_player->quantidadeTerritorio = 0;
-	_player->elementosQuantidade.luz = _player->elementosNivel.luz = 0;
-	_player->elementosQuantidade.trevas = _player->elementosNivel.trevas = 0;
-	_player->elementosQuantidade.fogo = _player->elementosNivel.fogo = 0;
-	_player->elementosQuantidade.agua = _player->elementosNivel.agua = 0;
-	_player->elementosQuantidade.terra = _player->elementosNivel.terra = 0;
-	_player->elementosQuantidade.ar = _player->elementosNivel.ar = 0;
+void BM_Player_iniciar_valores(int _hexagono) {
+	jogador->hexagonoAtual = _hexagono;
+	jogador->quantidadeTerritorio = 1;
+	jogador->elementosDisponivel.luz = TRUE;
+	jogador->elementosDisponivel.trevas = TRUE;
+	jogador->elementosDisponivel.fogo = TRUE;
+	jogador->elementosDisponivel.agua = TRUE;
+	jogador->elementosDisponivel.terra = TRUE;
+	jogador->elementosDisponivel.ar = TRUE;
+	jogador->elementosTempo.luz = 0;
+	jogador->elementosTempo.trevas = 0;
+	jogador->elementosTempo.fogo = 0;
+	jogador->elementosTempo.agua = 0;
+	jogador->elementosTempo.terra = 0;
+	jogador->elementosTempo.ar = 0;
 	BM_Campo_getCampo()->hexagonos[0].estado = JOGADOR;
+}
+//==========================================================================
+
+//==========================================================================
+// Checar se o elemento esta disponivel
+//==========================================================================
+int BM_Player_disponibilidade_elemento(int _elemento) {
+	int *elemento = &jogador->elementosDisponivel.luz;
+	return elemento[_elemento - 1];
+}
+//==========================================================================
+
+//==========================================================================
+// Checar elemento
+//==========================================================================
+void BM_Player_checar_elemento(int _elemento) {
+	int *elemento = &jogador->elementosDisponivel.luz;
+	elemento[_elemento - 1] = FALSE;
+	BM_Player_elementos();
+}
+//==========================================================================
+
+//==========================================================================
+// Liberar elementos se todos já tiverem sido usados
+//==========================================================================
+void BM_Player_elementos() {
+	int i, *elemento, vazio = TRUE;
+	elemento = &jogador->elementosDisponivel.luz;
+	for (i = 0; i < 6; i++, elemento++) {
+		if (*elemento == TRUE)
+			vazio = FALSE;
+	}
+	if (vazio == TRUE) {
+		elemento = &jogador->elementosDisponivel.luz;
+		for (i = 0; i < 6; i++, elemento++) {
+			*elemento = TRUE;
+		}
+	}
+}
+//==========================================================================
+
+//==========================================================================
+// Checar tempo elemento
+//==========================================================================
+void BM_Player_checar_tempo() {
+	int *elementoTempo, *elemento, i;
+	elementoTempo = &jogador->elementosTempo.luz;
+	for (i = 0; i < 6; i++, elementoTempo++) {
+		(*elementoTempo)++;
+	}
+	elementoTempo = &jogador->elementosTempo.luz;
+	elemento = &jogador->elementosDisponivel.luz;
+	for (i = 0; i < 6; i++, elementoTempo++, elemento++) {
+		if (*elementoTempo == 4) {
+			*elementoTempo = 0;
+			*elemento = TRUE;
+		}
+	}
 }
 //==========================================================================
 
@@ -75,7 +139,7 @@ void iniciarValores(BM_PLAYER *_player, int _hexagono) {
 //==========================================================================
 void BM_Player_mover(BM_PLAYER *_player, int _mouseX, int _mouseY) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono *hexagono = NULL, *aux = NULL;
+	BM_HEXAGONO *hexagono = NULL, *aux = NULL;
 	int i, j, pos, largura, altura;
 	for (i = 0; i < campo->quantidade; i++) {
 		hexagono = &campo->hexagonos[i];

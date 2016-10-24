@@ -5,33 +5,41 @@
 #include "BM_Recursos.h"
 #include "BM_Elemento.h"
 #include "BM_Recursos_Animacao.h"
+#include "BM_Player.h"
 #include <stdarg.h>
 
 //==========================================================================
 // Grafo de sincronia entre os elementos
 //==========================================================================
-const int BM_Sincronia[7][7] = { {0,0,0,0,0,0,0},
-								 {0,1,-2,-1,1,1,2},
-								 {0,-2,1,2,-1,1,1},
-								 {0,-1,2,1,-2,1,1},
-								 {0,1,-1,2,1,1,-2},
-								 {0,1,1,-2,2,1,-1},
-								 {0,1,1,2,-1,-2,1} };
+const int BM_Sincronia[7][7] = { {0, 0, 0, 0, 0, 0, 0 },
+							     {0, 1,-2, 2, -1, -1, 1},
+							     {0, -2, 1, -1, 2, 1, -1},
+							     {0, 2, -1, 1, -2, -1, 1},
+							     {0, -1, 2, -2, 1, 1, -1},
+							     {0, 1, 2, -1, -1, 1, -2},
+							     {0, 1, -1, 2, -1, -2, 1} };
+const int BM_Vantagem[7][7] = { {0,0,0,0,0,0,0},
+								{0,1,0,0,0,0,0},
+								{0,1,0,0,0,0,0},
+								{0,0,0,0,0,0,1},
+								{0,0,0,1,0,0,0},
+								{0,0,0,0,1,0,0},
+								{0,0,0,0,0,1,0} };
 //==========================================================================
 
 //==========================================================================
 // Prototipos
 //==========================================================================
-void BM_Hexagono_adicionar_listener_mouse(BM_Hexagono *_alvo, int _acao);
-void BM_Hexagono_adicionar_animacao(BM_Hexagono *_alvo);
+void BM_Hexagono_adicionar_listener_mouse(BM_HEXAGONO *_alvo, int _acao);
+void BM_Hexagono_adicionar_animacao(BM_HEXAGONO *_alvo);
 //==========================================================================
 
 //==========================================================================
 // Criar Hexagono
 //==========================================================================
-BM_Hexagono BM_Hexagono_criar(int _id, int _estado, int _elemento)
+BM_HEXAGONO BM_Hexagono_criar(int _id, int _estado, int _elemento)
 {
-	BM_Hexagono temp = { _id, _estado, _elemento, FALSE, FALSE };
+	BM_HEXAGONO temp = { _id, _estado, _elemento, FALSE, HEXAGONO_NORMAL };
 	return temp;
 }
 //==========================================================================
@@ -39,7 +47,7 @@ BM_Hexagono BM_Hexagono_criar(int _id, int _estado, int _elemento)
 //==========================================================================
 // Alterar estado e elemento do hexagono
 //==========================================================================
-void BM_Hexagono_alterar(BM_Hexagono *_hexagono, int _estado, int _elemento) {
+void BM_Hexagono_alterar(BM_HEXAGONO *_hexagono, int _estado, int _elemento) {
 	_hexagono->estado = _estado;
 	_hexagono->elemento = _elemento;
 }
@@ -51,7 +59,7 @@ void BM_Hexagono_alterar(BM_Hexagono *_hexagono, int _estado, int _elemento) {
 int BM_Hexagono_batalha(int _alvo, int _atacante) {
 	int resultadoAtaque = 0, resultadoDefesa = 0;
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono *hexagonoAtaque, *hexagonoDefesa;
+	BM_HEXAGONO *hexagonoAtaque, *hexagonoDefesa;
 	
 	//======================================================================
 	// Definir os hexagonos de ataque e defesa
@@ -77,12 +85,10 @@ int BM_Hexagono_batalha(int _alvo, int _atacante) {
 	//======================================================================
 	// Verificar se ha alguma superioridade de sincronia entre os hexagonos
 	//======================================================================
-	if (BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento] == 2)
+	if (BM_Vantagem[hexagonoAtaque->elemento][hexagonoDefesa->elemento] == 1)
 		resultadoAtaque += 4;
-	else if (BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento] == -2)
+	else if (BM_Vantagem[hexagonoDefesa->elemento][hexagonoAtaque->elemento] == 1)
 		resultadoDefesa += 4;
-	else
-		resultadoAtaque += BM_Sincronia[hexagonoAtaque->elemento][hexagonoDefesa->elemento];
 	//======================================================================
 
 	//======================================================================
@@ -110,7 +116,7 @@ int BM_Hexagono_batalha(int _alvo, int _atacante) {
 //==========================================================================
 int BM_Hexagono_marcar_alvos(int _centro, int _acao) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono hexagono = campo->hexagonos[_centro], *aux;
+	BM_HEXAGONO hexagono = campo->hexagonos[_centro], *aux;
 	int i, contador = 0;
 	for (i = 0; i < 6; i++) {
 		if (hexagono.conexoes[i] != -1) {
@@ -127,20 +133,69 @@ int BM_Hexagono_marcar_alvos(int _centro, int _acao) {
 //==========================================================================
 
 //==========================================================================
+// Marcar sincronia entre os hexagonos
+//==========================================================================
+void BM_Hexagono_marcar_sincronia() {
+	BM_Campo *campo = BM_Campo_getCampo();
+	BM_HEXAGONO hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual], *aux;
+	int i;
+	for (i = 0; i < 6; i++) {
+		if (hexagono.conexoes[i] != -1) {
+			aux = &campo->hexagonos[hexagono.conexoes[i]];
+			if (aux->estado == JOGADOR) {
+				switch (BM_Sincronia[hexagono.elemento][aux->elemento])
+				{
+				case 2:
+					aux->alvo = HEXAGONO_SINCRONIA;
+					break;
+				case 1:
+					aux->alvo = HEXAGONO_BAIXA_SINCRONIA;
+					break;
+				case -1:
+					aux->alvo = HEXAGONO_BAIXA_ANTI_SINCRONIA;
+					break;
+				case -2:
+					aux->alvo = HEXAGONO_ANTI_SINCRONIA;
+				}
+			}
+		}
+	}
+}
+//==========================================================================
+
+//==========================================================================
+// Desmarcar sincronia entre os hexagonos
+//==========================================================================
+void BM_Hexagono_desmarcar_sincronia() {
+	BM_Campo *campo = BM_Campo_getCampo();
+	BM_HEXAGONO hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual], *aux;
+	int i;
+	for (i = 0; i < 6; i++) {
+		if (hexagono.conexoes[i] != -1) {
+			aux = &campo->hexagonos[hexagono.conexoes[i]];
+			if (aux->estado == JOGADOR) {
+				aux->alvo = HEXAGONO_NORMAL;
+			}
+		}
+	}
+}
+//==========================================================================
+
+//==========================================================================
 // Adicionar/Remover listener de eventos do mouse no hexagono selecionado
 //==========================================================================
-void BM_Hexagono_adicionar_listener_mouse(BM_Hexagono *_alvo, int _acao) {
+void BM_Hexagono_adicionar_listener_mouse(BM_HEXAGONO *_alvo, int _acao) {
 	int finalX, finalY, *id;
 	finalX = _alvo->posicaoX + BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->bitmap);
 	finalY = _alvo->posicaoY + BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->bitmap);
 	switch (_acao)
 	{
-	case MARCAR:
+	case HEXAGONO_ALVO:
 		id = (int*)malloc(1 * sizeof(int));
 		*id = _alvo->id;
 		BM_Eventos_Mouse_adicionar(NULL, _alvo->posicaoX, _alvo->posicaoY, finalX, finalY, id);
 		break;
-	case DESMARCAR:
+	case HEXAGONO_NORMAL:
 		BM_Eventos_Mouse_remover(_alvo->posicaoX, _alvo->posicaoY, finalX, finalY);
 		break;
 	}
@@ -150,10 +205,10 @@ void BM_Hexagono_adicionar_listener_mouse(BM_Hexagono *_alvo, int _acao) {
 //==========================================================================
 // Calcular vinculo
 //==========================================================================
-int BM_Hexagono_calcular_sincronia(BM_Hexagono _alvo, int _player) {
+int BM_Hexagono_calcular_sincronia(BM_HEXAGONO _alvo, int _player) {
 	int resultado = 0, i;
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_Hexagono aux;
+	BM_HEXAGONO aux;
 	for (i = 0; i < 6; i++) {
 		if (_alvo.conexoes[i] != -1) {
 			aux = campo->hexagonos[_alvo.conexoes[i]];
@@ -168,7 +223,7 @@ int BM_Hexagono_calcular_sincronia(BM_Hexagono _alvo, int _player) {
 //==========================================================================
 // Adicionar animações de batalha
 //==========================================================================
-void BM_Hexagono_adicionar_animacao(BM_Hexagono *_alvo) {
+void BM_Hexagono_adicionar_animacao(BM_HEXAGONO *_alvo) {
 	switch (_alvo->elemento)
 	{
 	case LUZ:

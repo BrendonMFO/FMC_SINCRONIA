@@ -6,6 +6,7 @@
 #include "BM_Player_IA.h"
 #include "BM_Rodadas.h"
 #include "BM_Campo.h"
+#include <string.h>
 
 //=========================================================================
 // Macros
@@ -28,7 +29,7 @@ void BM_Render_campo();
 void BM_Render_animacao();
 void BM_Render_player();
 void BM_Render_player_ia();
-void BM_Render_hexagono(BM_Hexagono _hexagono);
+void BM_Render_hexagono(BM_HEXAGONO _hexagono);
 void BM_Render_renderizar_fila();
 BM_RENDER *BM_Render_procurar_fila(BM_RENDER_FUNCAO _funcao);
 //==========================================================================
@@ -128,7 +129,7 @@ void BM_Render_campo() {
 //==========================================================================
 // Renderizar hexagono do campo
 //==========================================================================
-void BM_Render_hexagono(BM_Hexagono _hexagono)
+void BM_Render_hexagono(BM_HEXAGONO _hexagono)
 {
 	int sourceW, sourceH, sourceX, sourceY;
 	sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesColunas;
@@ -137,8 +138,10 @@ void BM_Render_hexagono(BM_Hexagono _hexagono)
 	if (_hexagono.visivel == TRUE || _hexagono.estado == JOGADOR) sourceY = sourceH * _hexagono.elemento;
 	else sourceY = 0;
 	RENDER_REGION(BM_IMG_HEXAGONO, sourceX, sourceY, sourceW, sourceH, _hexagono.posicaoX, _hexagono.posicaoY, 0);
-	if (_hexagono.alvo == TRUE) 
-		RENDER_IMG(BM_IMG_HEXAGONO_ALVO, _hexagono.posicaoX, _hexagono.posicaoY, 0);
+	sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->Imagem) / SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->framesColunas;
+	sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->Imagem) / SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->framesLinhas;
+	if(_hexagono.alvo != HEXAGONO_NORMAL)
+		RENDER_REGION(BM_IMG_HEXAGONO_ALVO, sourceW * (_hexagono.alvo - 1), 0, sourceW, sourceH, _hexagono.posicaoX, _hexagono.posicaoY, 0);
 }
 //==========================================================================
 
@@ -206,14 +209,18 @@ void BM_Render_player_ia() {
 // Renderizar Elementos
 //==========================================================================
 void BM_Render_elementos(void *_parametro, ...) {
-	int sourceW, sourceH, sourceX, destinoX, i;
+	int sourceW, sourceH, sourceX, destinoX, i, *elemento;
 	al_draw_filled_rectangle(0, 0, 1600, 920, al_map_rgba(0, 0, 0, 150));
-	for (i = 0; i <= 6; i++) {
+	elemento = &BM_Player_getJogador()->elementosDisponivel.luz;
+	for (i = 0; i <= 6; i++, elemento++) {
 		sourceW = BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_ELEMENTOS)->Imagem) / SPRITES(BM_IMG_ELEMENTOS)->imagem->framesColunas;
 		sourceH = BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_ELEMENTOS)->Imagem) / SPRITES(BM_IMG_ELEMENTOS)->imagem->framesLinhas;
 		sourceX = sourceW * i;
 		destinoX = 196 + (sourceW * i);
-		al_draw_bitmap_region(SPRITES(BM_IMG_ELEMENTOS)->Imagem, sourceX, 0, sourceW, sourceH, destinoX, 266, 0);
+		if(*elemento == TRUE)
+			al_draw_bitmap_region(SPRITES(BM_IMG_ELEMENTOS)->Imagem, sourceX, 0, sourceW, sourceH, destinoX, 266, 0);
+		else
+			al_draw_tinted_bitmap_region(SPRITES(BM_IMG_ELEMENTOS)->Imagem, al_map_rgb(100, 100, 100), sourceX, 0, sourceW, sourceH, destinoX, 266, 0);
 	}
 }
 //==========================================================================
@@ -222,7 +229,28 @@ void BM_Render_elementos(void *_parametro, ...) {
 // Renderizar Rodada
 //==========================================================================
 void BM_Render_rodada(void *_parametro, ...) {
-	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), 800, 15, ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), 100, 10, ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar resultado
+//==========================================================================
+void BM_Render_resultado(void *_parametro, ...) {
+	int jogador = BM_Player_getJogador()->quantidadeTerritorio;
+	int ia = BM_Player_getIAPlayer()->quantidadeTerritorio;
+	char texto[10];
+	al_draw_filled_rectangle(0, 0, 1600, 920, al_map_rgba(0, 0, 0, 150));
+	if (jogador > ia) strcpy(texto, "Vitoria");
+	else if (jogador < ia) strcpy(texto, "Derrota");
+	else strcpy(texto, "Empate");
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(220, 220, 220), 800, 125, ALLEGRO_ALIGN_CENTRE, "%s", texto);
+	RENDER_REGION(BM_IMG_HEXAGONO, 238, 0, 238, 206, 323, 326, 0);
+	RENDER_REGION(BM_IMG_HEXAGONO, 476, 0, 238, 206, 1065, 326, 0);
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 255, 255), 435, 350, ALLEGRO_ALIGN_CENTRE, "%d", jogador);
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 255, 255), 1185, 350, ALLEGRO_ALIGN_CENTRE, "%d", ia);
+	al_draw_text(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 255, 255), 800, 700, ALLEGRO_ALIGN_CENTRE, "R - Reiniciar");
+
 }
 //==========================================================================
 

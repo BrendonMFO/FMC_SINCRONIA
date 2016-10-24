@@ -8,14 +8,12 @@
 #define VITORIA_ATAQUE 1
 #define VITORIA_DEFESA 2
 #define EMPATE 3
-#define DESMARCAR 0
-#define MARCAR 1
 //==========================================================================
 
 //==========================================================================
 // Enum - tipo de estados disponiveis para um hexagono
 //==========================================================================
-enum BM_Hexagono_Estado
+enum BM_HEXAGONO_ESTADO
 {
 	NEUTRO = 0,
 	JOGADOR,
@@ -24,9 +22,22 @@ enum BM_Hexagono_Estado
 //==========================================================================
 
 //==========================================================================
+// Enum - sincronia atual do hexagono
+//==========================================================================
+enum BM_HEXAGONO_SINCRONIA {
+	HEXAGONO_NORMAL,
+	HEXAGONO_ALVO,
+	HEXAGONO_SINCRONIA,
+	HEXAGONO_ANTI_SINCRONIA,
+	HEXAGONO_BAIXA_ANTI_SINCRONIA,
+	HEXAGONO_BAIXA_SINCRONIA
+};
+//==========================================================================
+
+//==========================================================================
 // Estrutura de dados para definir um hexagono a
 //==========================================================================
-typedef struct BM_Hexagono_S {
+typedef struct BM_HEXAGONO_S {
 	int id;
 	int estado;
 	int elemento;
@@ -35,19 +46,19 @@ typedef struct BM_Hexagono_S {
 	int posicaoX;
 	int posicaoY;
 	int conexoes[6];
-} BM_Hexagono;
+} BM_HEXAGONO;
 //==========================================================================
 
 //==========================================================================
 // Criar Hexagono
 //==========================================================================
-BM_Hexagono BM_Hexagono_criar(int _id, int _estado, int _elemento);
+BM_HEXAGONO BM_Hexagono_criar(int _id, int _estado, int _elemento);
 //==========================================================================
 
 //==========================================================================
 // Alterar estado e elemento do hexagono
 //==========================================================================
-void BM_Hexagono_alterar(BM_Hexagono *_hexagono, int _estado, int _elemento);
+void BM_Hexagono_alterar(BM_HEXAGONO *_hexagono, int _estado, int _elemento);
 //==========================================================================
 
 //==========================================================================
@@ -65,5 +76,17 @@ int BM_Hexagono_batalha(int _alvo, int _atacante);
 //==========================================================================
 // Calcular sincronia dos elementos apartir de um hexagono
 //==========================================================================
-int BM_Hexagono_calcular_sincronia(BM_Hexagono _alvo, int _player);
+int BM_Hexagono_calcular_sincronia(BM_HEXAGONO _alvo, int _player);
+//==========================================================================
+
+//==========================================================================
+// Marcar sincronia entre os hexagonos
+//==========================================================================
+void BM_Hexagono_marcar_sincronia();
+//==========================================================================
+
+//==========================================================================
+// Desmarcar sincronia entre os hexagonos
+//==========================================================================
+void BM_Hexagono_marcar_sincronia();
 //==========================================================================
