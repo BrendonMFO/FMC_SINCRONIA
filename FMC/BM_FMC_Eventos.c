@@ -1,20 +1,23 @@
 #include "BM_FMC_Eventos.h"
 #include "BM_Campo.h"
+#include "BM_Allegro_eventos_mouse.h"
 #include "BM_Recursos.h"
 #include "BM_Renders.h"
 #include "BM_Elemento.h"
+#include "BM_Player.h"
 #include "BM_Player_IA.h"
 #include "BM_Recursos_Animacao.h"
 #include "BM_Rodadas.h"
+#include "BM_Hexagono.h"
 
 //==========================================================================
 // Prototipos
 //==========================================================================
-void BM_Evento_jogador(void);
-void BM_Evento_alvo(void);
-void BM_Evento_escolha(void);
-void BM_Evento_reiniciar(void);
-void BM_Jogo_verificar_fim(void);
+void BM_Evento_jogador(void *_parametro);
+void BM_Evento_alvo(void *_parametro);
+void BM_Evento_escolha(void *_parametro);
+void BM_Evento_reiniciar(void *_parametro);
+void BM_Jogo_verificar_fim();
 //==========================================================================
 
 //==========================================================================
@@ -23,7 +26,7 @@ void BM_Jogo_verificar_fim(void);
 void BM_FMC_Evento_inicial() {
 	BM_Rodada_set(50);
 	BM_Player_iniciar_valores(0);
-	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 	BM_Render_adicionar_funcao(BM_Render_rodada);
 }
 //==========================================================================
@@ -31,7 +34,7 @@ void BM_FMC_Evento_inicial() {
 //==========================================================================
 // Verificar se o jogo possue um vencedor
 //==========================================================================
-void BM_Jogo_verificar_fim(void) {
+void BM_Jogo_verificar_fim() {
 	BM_PLAYER *a = BM_Player_getJogador();
 	BM_PLAYER *b = BM_Player_getIAPlayer();
 	if (BM_Rodada_get_restantes() == 0 || 
@@ -39,7 +42,7 @@ void BM_Jogo_verificar_fim(void) {
 		BM_Player_getIAPlayer()->quantidadeTerritorio == 0) {
 		BM_Render_adicionar_funcao(BM_Render_resultado);
 		BM_Eventos_Funcoes_remover(BM_Evento_jogador);
-		BM_Eventos_Funcoes_adicionar(BM_Evento_reiniciar);
+		BM_Eventos_Funcoes_adicionar(BM_Evento_reiniciar, NULL);
 	}
 }
 //==========================================================================
@@ -47,33 +50,35 @@ void BM_Jogo_verificar_fim(void) {
 //==========================================================================
 // Eventos disparados pelo jogador
 //==========================================================================
-void BM_Evento_jogador(void) {
+void BM_Evento_jogador(void *_parametro) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
-	switch (aux.type) {
-	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-		BM_Player_mover(BM_Player_getJogador(), aux.mouse.x, aux.mouse.y);
-		break;
-	case ALLEGRO_EVENT_KEY_DOWN:
-		switch (aux.keyboard.keycode) {
-		case ALLEGRO_KEY_A:
-			if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado == JOGADOR) {
-				if (BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_ALVO) > 0) {
-					BM_Hexagono_marcar_sincronia();
-					BM_Eventos_Funcoes_remover(BM_Evento_jogador);
-					BM_Eventos_Funcoes_adicionar(BM_Evento_alvo);
-				}
-			}
+	if (BM_IA_get_executando() == FALSE) {
+		switch (aux.type) {
+		case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+			BM_Player_mover(BM_Player_getJogador(), aux.mouse.x, aux.mouse.y);
 			break;
-		case ALLEGRO_KEY_S:
-			if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado != ADVERSARIO) {
-				BM_Elemento_adicionar_mouse_listener();
-				BM_Render_adicionar_funcao(BM_Render_elementos);
-				BM_Eventos_Funcoes_remover(BM_Evento_jogador);
-				BM_Eventos_Funcoes_adicionar(BM_Evento_escolha);
+		case ALLEGRO_EVENT_KEY_DOWN:
+			switch (aux.keyboard.keycode) {
+			case ALLEGRO_KEY_A:
+				if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado == JOGADOR) {
+					if (BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_ALVO) > 0) {
+						BM_Hexagono_marcar_sincronia();
+						BM_Eventos_Funcoes_remover(BM_Evento_jogador);
+						BM_Eventos_Funcoes_adicionar(BM_Evento_alvo, NULL);
+					}
+				}
+				break;
+			case ALLEGRO_KEY_S:
+				if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado != ADVERSARIO) {
+					BM_Elemento_adicionar_mouse_listener();
+					BM_Render_adicionar_funcao(BM_Render_elementos);
+					BM_Eventos_Funcoes_remover(BM_Evento_jogador);
+					BM_Eventos_Funcoes_adicionar(BM_Evento_escolha, NULL);
+				}
+				break;
 			}
 			break;
 		}
-		break;
 	}
 }
 //==========================================================================
@@ -81,7 +86,7 @@ void BM_Evento_jogador(void) {
 //==========================================================================
 // Eventos quando a opção de ataque esta selecionada
 //==========================================================================
-void BM_Evento_alvo(void) {
+void BM_Evento_alvo(void *_parametro) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	BM_EVENTO_MOUSE *mouse;
 	BM_Campo *campo = BM_Campo_getCampo();
@@ -116,7 +121,7 @@ void BM_Evento_alvo(void) {
 				 break;
 			 }
 			 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
-			 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+			 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 			 BM_IA_disparar();
 			 BM_Jogo_verificar_fim();
 		 }
@@ -127,7 +132,7 @@ void BM_Evento_alvo(void) {
 			BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
 			BM_Hexagono_desmarcar_sincronia();
 			BM_Eventos_Funcoes_remover(BM_Evento_alvo);
-			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 			break;
 		}
 		break;
@@ -138,7 +143,7 @@ void BM_Evento_alvo(void) {
 //==========================================================================
 // Eventos na tela de seleção de elementos
 //==========================================================================
-void BM_Evento_escolha(void) {
+void BM_Evento_escolha(void *_parametro) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_EVENTO_MOUSE *mouse;
@@ -157,7 +162,7 @@ void BM_Evento_escolha(void) {
 				BM_Elemento_remover_mouse_listener();
 				BM_Render_remover_funcao(BM_Render_elementos);
 				BM_Eventos_Funcoes_remover(BM_Evento_escolha);
-				BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+				BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 				BM_IA_disparar();
 				BM_Jogo_verificar_fim();
 			}
@@ -169,7 +174,7 @@ void BM_Evento_escolha(void) {
 			BM_Elemento_remover_mouse_listener();
 			BM_Render_remover_funcao(BM_Render_elementos);
 			BM_Eventos_Funcoes_remover(BM_Evento_escolha);
-			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador);
+			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 			break;
 		}
 		break;
@@ -180,7 +185,7 @@ void BM_Evento_escolha(void) {
 //==========================================================================
 // Reiniciar jogo
 //==========================================================================
-void BM_Evento_reiniciar(void) {
+void BM_Evento_reiniciar(void *_parametro) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	switch (aux.type) {
 	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:

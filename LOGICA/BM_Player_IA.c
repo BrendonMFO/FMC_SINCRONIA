@@ -1,15 +1,28 @@
 #pragma once
 
+#include "BM_Allegro_eventos.h"
 #include "BM_Player_IA.h"
 #include "BM_Campo.h"
 #include "BM_Hexagono.h"
 #include "BM_Rodadas.h"
+# include <stdarg.h>
 #include <stdio.h>
+
+//==========================================================================
+// Estrutura de ação da IA
+//==========================================================================
+typedef struct BM_IA_ACAO_S {
+	int tempoFrames;
+	int tempoAtual;
+}BM_IA_ACAO;
+//==========================================================================
 
 //==========================================================================
 // Variaveis
 //==========================================================================
 BM_PLAYER *ia = NULL;
+BM_IA_ACAO BM_IA_acao;
+int BM_IA_executando = FALSE;
 //==========================================================================
 
 //==========================================================================
@@ -46,10 +59,14 @@ typedef struct BM_IA_ARVORE_S
 //==========================================================================
 void BM_IA_possibilidade_ataque(BM_IA_ARVORE *_arvore);
 void BM_IA_possibilidade_conquista(BM_IA_ARVORE *_arvore);
-void BM_IA_conquistar_territorio(int _indexHexagono);
-void BM_IA_atacar(int _indexHexagono);
 void BM_IA_iniciar_arvore(BM_IA_ARVORE *_arvore);
+void BM_IA_conquistar_territorio(int _indexHexagono);
+void BM_IA_preparar_ataque(int _indexHexagono);
+void BM_IA_executar_ataque(int _alvo, int _atacante);
+void BM_IA_aguardar_ataque(void *_parametro);
+void BM_IA_aguardar_escolha(void *_parametro);
 void BM_IA_arvore_desalocar(BM_IA **_no);
+void BM_IA_iniciar_acao(BM_EVENTO_FUNCAO _funcao, int _quantidade, ...);
 int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono);
 int BM_IA_arvore_vazia(BM_IA_ARVORE *_arvore);
 int BM_IA_checar_elemento();
@@ -75,6 +92,7 @@ int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono) {
 		(*_no)->direita = NULL;
 		(*_no)->valor = _valor;
 		(*_no)->hexagono = _hexagono;
+		return SUCESSO;
 	}
 	else {
 		if (_valor < (*_no)->valor)
@@ -85,6 +103,7 @@ int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono) {
 			BM_IA_arvore_inserir(&(*_no)->centro, _valor, _hexagono);
 		}
 	}
+	return ERRO;
 }
 //==========================================================================
 
@@ -94,7 +113,7 @@ int BM_IA_arvore_inserir(BM_IA **_no, int _valor, int _hexagono) {
 void BM_IA_arvore_desalocar(BM_IA **_no) {
 	if ((*_no) != NULL) {
 		if ((*_no)->direita == NULL && (*_no)->esquerda == NULL && (*_no)->centro == NULL)
-			return free((*_no));
+			free((*_no));
 		else {
 			if ((*_no)->esquerda != NULL)
 				BM_IA_arvore_desalocar(&(*_no)->esquerda);
@@ -193,6 +212,7 @@ void BM_IA_disparar() {
 	int ataque = FALSE, conquista = FALSE, decisao;
 	BM_IA_ARVORE arvoreAtaque, arvoreConquista;
 	time_t t; srand((unsigned)time(&t));
+	BM_IA_executando = TRUE;
 
 	//======================================================================
 	// Iniciar arvores
@@ -220,16 +240,18 @@ void BM_IA_disparar() {
 	//======================================================================
 	if (ataque == TRUE && conquista == TRUE) {
 		decisao = (rand() % 100) + 1;
-		if (decisao >= 0 && decisao <= 70)
-			BM_IA_atacar(BM_IA_executar(&arvoreAtaque.raiz)->hexagono);
+		if (decisao >= 0 && decisao <= 70) {
+			BM_IA_iniciar_acao(BM_IA_aguardar_ataque, 1, BM_IA_executar(&arvoreAtaque.raiz)->hexagono);
+		}
 		else
 			BM_IA_conquistar_territorio(BM_IA_executar(&arvoreConquista.raiz)->hexagono);
 	}
 	else {
 		if(conquista == TRUE)
 			BM_IA_conquistar_territorio(BM_IA_executar(&arvoreConquista.raiz)->hexagono);
-		if(ataque == TRUE)
-			BM_IA_atacar(BM_IA_executar(&arvoreAtaque.raiz)->hexagono);
+		if (ataque == TRUE) {
+			BM_IA_iniciar_acao(BM_IA_aguardar_ataque, 1, BM_IA_executar(&arvoreAtaque.raiz)->hexagono);
+		}
 	}
 	//======================================================================
 
@@ -240,7 +262,6 @@ void BM_IA_disparar() {
 	BM_IA_arvore_desalocar(&arvoreConquista.raiz);
 	//======================================================================
 
-	BM_Rodada_avancar();
 }
 //==========================================================================
 
@@ -299,19 +320,20 @@ void BM_IA_possibilidade_conquista(BM_IA_ARVORE *_arvore) {
 //==========================================================================
 void BM_IA_conquistar_territorio(int _indexHexagono) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	int elemento;
 	campo->hexagonos[_indexHexagono].estado = ADVERSARIO;
 	campo->hexagonos[_indexHexagono].visivel = FALSE;
 	campo->hexagonos[_indexHexagono].elemento = BM_IA_checar_elemento();
 	ia->hexagonoAtual = campo->hexagonos[_indexHexagono].id;
 	ia->quantidadeTerritorio++;
+	BM_Rodada_avancar();
+	BM_IA_executando = FALSE;
 }
 //==========================================================================
 
 //==========================================================================
 // Dispara ataque
 //==========================================================================
-void BM_IA_atacar(int _indexHexagono) {
+void BM_IA_preparar_ataque(int _indexHexagono) {
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_HEXAGONO *hexagono = &campo->hexagonos[_indexHexagono];
 	int i, possibilidade[6], contador = 0;
@@ -324,10 +346,20 @@ void BM_IA_atacar(int _indexHexagono) {
 			}
 	}
 	i = rand() % contador;
-	switch (BM_Hexagono_batalha(campo->hexagonos[possibilidade[i]].id, _indexHexagono))
+	campo->hexagonos[possibilidade[i]].alvo = HEXAGONO_ALVO;
+	BM_IA_iniciar_acao(BM_IA_aguardar_escolha, 2, possibilidade[i], _indexHexagono);
+}
+//==========================================================================
+
+//==========================================================================
+// Executar ataque
+//==========================================================================
+void BM_IA_executar_ataque(int _alvo, int _atacante) {
+	BM_Campo *campo = BM_Campo_getCampo();
+	switch (BM_Hexagono_batalha(campo->hexagonos[_alvo].id, _atacante))
 	{
 	case VITORIA_ATAQUE:
-		campo->hexagonos[possibilidade[i]].estado = ADVERSARIO;
+		campo->hexagonos[_alvo].estado = ADVERSARIO;
 		BM_Player_getIAPlayer()->quantidadeTerritorio++;
 		BM_Player_getJogador()->quantidadeTerritorio--;
 		break;
@@ -336,6 +368,9 @@ void BM_IA_atacar(int _indexHexagono) {
 		BM_Player_getIAPlayer()->quantidadeTerritorio--;
 		BM_Player_getJogador()->quantidadeTerritorio++;
 	}
+	campo->hexagonos[_alvo].alvo = HEXAGONO_NORMAL;
+	BM_Rodada_avancar();
+	BM_IA_executando = FALSE;
 }
 //==========================================================================
 
@@ -383,3 +418,45 @@ void BM_IA_checar_tempo() {
 	}
 }
 //==========================================================================
+
+//==========================================================================
+// Inserir ordem de ação da IA
+//==========================================================================
+void BM_IA_iniciar_acao(BM_EVENTO_FUNCAO _funcao, int _quantidade, ...) {
+	va_list ap;
+	BM_Campo *campo = BM_Campo_getCampo();
+	int *parametro = (int*)malloc(_quantidade * sizeof(int)), i;
+	va_start(ap, _quantidade);
+	for (i = 0; i < _quantidade; i++) {
+		parametro[i] = va_arg(ap, int);
+	}
+	BM_IA_acao.tempoFrames = 60;
+	BM_IA_acao.tempoAtual = 0;
+	BM_Eventos_Funcoes_adicionar(_funcao, parametro);
+	va_end(ap);
+}
+//==========================================================================
+
+void BM_IA_aguardar_ataque(void *_parametro) {
+	if (BM_IA_acao.tempoAtual >= BM_IA_acao.tempoFrames) {
+		BM_Eventos_Funcoes_remover(BM_IA_aguardar_ataque);
+		BM_IA_preparar_ataque(*(int*)_parametro);
+	}
+	else
+		BM_IA_acao.tempoAtual++;
+}
+
+void BM_IA_aguardar_escolha(void *_parametro) {
+	int *parametro;
+	if (BM_IA_acao.tempoAtual >= BM_IA_acao.tempoFrames) {
+		parametro = (int*)_parametro;
+		BM_Eventos_Funcoes_remover(BM_IA_aguardar_escolha);
+		BM_IA_executar_ataque(parametro[0], parametro[1]);
+	}
+	else
+		BM_IA_acao.tempoAtual++;
+}
+
+int BM_IA_get_executando() {
+	return BM_IA_executando;
+}

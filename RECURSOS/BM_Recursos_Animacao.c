@@ -15,7 +15,7 @@ int animacaoAdicionada = 0;
 // Prototipos
 //==========================================================================
 BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao);
-void BM_Animacao_processar(void);
+void BM_Animacao_processar(void *_parametro, ...);
 //==========================================================================
 
 //==========================================================================
@@ -66,7 +66,7 @@ int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderW, int _renderH, int _
 		animacoes->inicio = aux;
 		animacoes->fim = aux;
 		aux->proximo = NULL;
-		BM_Eventos_Funcoes_adicionar(BM_Animacao_processar);
+		BM_Eventos_Funcoes_adicionar(BM_Animacao_processar, NULL);
 	}
 	else
 	{
@@ -138,7 +138,7 @@ BM_ANIMACAO *BM_Animacao_procurar_fila(BM_ANIMACAO *_animacao) {
 //==========================================================================
 // Processar animações
 //==========================================================================
-void BM_Animacao_processar() {
+void BM_Animacao_processar(void *_parametro, ...) {
 	BM_ANIMACAO *aux;
 	for (aux = animacoes->inicio; aux != NULL; aux = aux->proximo) {
 		if (aux->tempoAtual >= aux->tempoAtualizacao) {

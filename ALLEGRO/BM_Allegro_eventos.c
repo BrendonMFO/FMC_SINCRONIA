@@ -88,11 +88,12 @@ void BM_Eventos_executarFilaFuncoes() {
 	BM_EVENTOS_FUNCAO *aux, *aux2;
 	if (BM_Eventos_obter_fila_funcao() != NULL) {
 		for (aux = BM_Eventos_obter_fila_funcao()->inicio; aux != NULL;) {
-			aux->funcao();
+			aux->funcao(aux->parametro);
 			if (aux->ativo == INATIVO) {
 				if (aux->proximo == NULL) aux = NULL;
 				else {
 					aux2 = aux->proximo;
+					free(aux->parametro);
 					free(aux);
 					aux = aux2;
 				}

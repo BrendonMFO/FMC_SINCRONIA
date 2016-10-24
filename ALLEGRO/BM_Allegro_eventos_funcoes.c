@@ -11,7 +11,7 @@ BM_EVENTOS_FILA *BM_Fila_eventos = NULL;
 //==========================================================================
 // Prototipos
 //==========================================================================
-BM_EVENTOS_FUNCAO *BM_Eventos_procurar_fila(BM_Evento_funcao _funcao);
+BM_EVENTOS_FUNCAO *BM_Eventos_procurar_fila(BM_EVENTO_FUNCAO _funcao);
 //==========================================================================
 
 //==========================================================================
@@ -32,7 +32,7 @@ int BM_Eventos_iniciar_fila_funcoes() {
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao) {
+int BM_Eventos_Funcoes_adicionar(BM_EVENTO_FUNCAO _funcao, void *_parametro) {
 	BM_EVENTOS_FUNCAO *aux = (BM_EVENTOS_FUNCAO*)malloc(1 * sizeof(BM_EVENTOS_FUNCAO));
 	if (aux == NULL) {
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para a pilha de funcoes\n");
@@ -40,6 +40,7 @@ int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao) {
 	}
 	aux->ativo = ATIVO;
 	aux->funcao = _funcao;
+	aux->parametro = _parametro;
 	aux->proximo = NULL;
 	if (BM_Fila_eventos->fim == NULL) {
 		BM_Fila_eventos->inicio = aux;
@@ -59,7 +60,7 @@ int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao) {
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-void BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao) {
+void BM_Eventos_Funcoes_remover(BM_EVENTO_FUNCAO _funcao) {
 	BM_EVENTOS_FUNCAO *aux = BM_Eventos_procurar_fila(_funcao);
 	if (aux == NULL)
 		return;
@@ -84,7 +85,7 @@ void BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao) {
 //==========================================================================
 // Procurar na fila uma animação especifica
 //==========================================================================
-BM_EVENTOS_FUNCAO *BM_Eventos_procurar_fila(BM_Evento_funcao _funcao) {
+BM_EVENTOS_FUNCAO *BM_Eventos_procurar_fila(BM_EVENTO_FUNCAO _funcao) {
 	BM_EVENTOS_FUNCAO *aux;
 	for (aux = BM_Fila_eventos->inicio; aux != NULL; aux = aux->proximo) {
 		if (aux->funcao == _funcao)

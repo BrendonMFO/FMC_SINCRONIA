@@ -3,7 +3,7 @@
 //==========================================================================
 // Typedef's
 //==========================================================================
-typedef void(*BM_Evento_funcao)(void);
+typedef void(*BM_EVENTO_FUNCAO)(void*);
 //==========================================================================
 
 //==========================================================================
@@ -19,7 +19,8 @@ typedef void(*BM_Evento_funcao)(void);
 typedef struct BM_EVENTOS_FUNCAO_S {
 	struct BM_EVENTOS_FUNCAO_S *anterior;
 	int ativo;
-	BM_Evento_funcao funcao;
+	void *parametro;
+	BM_EVENTO_FUNCAO funcao;
 	struct BM_EVENTOS_FUNCAO_S *proximo;
 }BM_EVENTOS_FUNCAO;
 //==========================================================================
@@ -42,13 +43,13 @@ int BM_Eventos_iniciar_fila_funcoes();
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-int BM_Eventos_Funcoes_adicionar(BM_Evento_funcao _funcao);
+int BM_Eventos_Funcoes_adicionar(BM_EVENTO_FUNCAO _funcao, void *_parametro);
 //==========================================================================
 
 //==========================================================================
 // Adicionar funcao na fila
 //==========================================================================
-void BM_Eventos_Funcoes_remover(BM_Evento_funcao _funcao);
+void BM_Eventos_Funcoes_remover(BM_EVENTO_FUNCAO _funcao);
 //==========================================================================
 
 //==========================================================================
