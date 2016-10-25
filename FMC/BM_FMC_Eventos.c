@@ -24,7 +24,7 @@ void BM_Jogo_verificar_fim();
 // Evento inicial
 //==========================================================================
 void BM_FMC_Evento_inicial() {
-	BM_Rodada_set(50);
+	BM_Rodada_set(10);
 	BM_Player_iniciar_valores(0);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 	BM_Render_adicionar_funcao(BM_Render_rodada);
@@ -35,8 +35,7 @@ void BM_FMC_Evento_inicial() {
 // Verificar se o jogo possue um vencedor
 //==========================================================================
 void BM_Jogo_verificar_fim() {
-	BM_PLAYER *a = BM_Player_getJogador();
-	BM_PLAYER *b = BM_Player_getIAPlayer();
+	int a = BM_Rodada_get_restantes();
 	if (BM_Rodada_get_restantes() == 0 || 
 		BM_Player_getJogador()->quantidadeTerritorio == 0 ||
 		BM_Player_getIAPlayer()->quantidadeTerritorio == 0) {

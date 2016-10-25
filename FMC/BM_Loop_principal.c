@@ -47,6 +47,7 @@ void BM_Loop() {
 //==========================================================================
 void BM_Loop_controlar_fps() {
 	BM_Loop_frame++;
+	printf("%d\n", BM_Loop_frame);
 	if (BM_Loop_limitado && (BM_obterTempoTimer() < 1.0 / FPS))
 		al_rest((1.0 / FPS) - BM_obterTempoTimer());
 }
