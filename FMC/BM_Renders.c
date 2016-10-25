@@ -20,6 +20,7 @@
 // Variaveis
 //==========================================================================
 BM_RENDER_FILA *renderFila = NULL;
+int TUTORIAL = 0;
 //==========================================================================
 
 //==========================================================================
@@ -222,6 +223,7 @@ void BM_Render_elementos(void *_parametro, ...) {
 		else
 			al_draw_tinted_bitmap_region(SPRITES(BM_IMG_ELEMENTOS)->Imagem, al_map_rgb(100, 100, 100), sourceX, 0, sourceW, sourceH, destinoX, 266, 0);
 	}
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA_MENOR), al_map_rgb(255, 200, 200), 1300, 800, ALLEGRO_ALIGN_LEFT, "ESC - Voltar", BM_Rodada_get_restantes());
 }
 //==========================================================================
 
@@ -229,7 +231,16 @@ void BM_Render_elementos(void *_parametro, ...) {
 // Renderizar Rodada
 //==========================================================================
 void BM_Render_rodada(void *_parametro, ...) {
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA_MENOR), al_map_rgb(225, 225, 225), 1100, 850, ALLEGRO_ALIGN_LEFT, "A - Atacar S - Adicionar", BM_Rodada_get_restantes());
 	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), 100, 10, ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar texto jogo
+//==========================================================================
+void BM_Render_texto(void *_parametro, ...) {
+	al_draw_text(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), 0, 0, ALLEGRO_ALIGN_LEFT, "A - atacar S - Adicionar");
 }
 //==========================================================================
 
@@ -251,6 +262,31 @@ void BM_Render_resultado(void *_parametro, ...) {
 	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 255, 255), 1185, 350, ALLEGRO_ALIGN_CENTRE, "%d", ia);
 	al_draw_text(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 255, 255), 800, 700, ALLEGRO_ALIGN_CENTRE, "R - Reiniciar");
 
+}
+//==========================================================================
+
+//==========================================================================
+// Renderizar tutorial
+//==========================================================================
+void BM_Render_tutorial(void *_parametro, ...) {
+	al_draw_filled_rectangle(0, 0, 1600, 920, al_map_rgba(0, 0, 0, 220));
+	al_draw_bitmap(BM_Recursos_obter_tutorial(TUTORIAL), 0, 0, 0);
+}
+//==========================================================================
+
+//==========================================================================
+// Avançar render
+//==========================================================================
+void BM_Render_avancar_tutorial() {
+	TUTORIAL++;
+}
+//==========================================================================
+
+//==========================================================================
+// Obter tutorial
+//==========================================================================
+int BM_Render_obter_tutorial() {
+	return TUTORIAL;
 }
 //==========================================================================
 

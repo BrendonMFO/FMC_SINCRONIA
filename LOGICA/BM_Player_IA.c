@@ -5,6 +5,7 @@
 #include "BM_Campo.h"
 #include "BM_Hexagono.h"
 #include "BM_Rodadas.h"
+#include "BM_FMC_Eventos.h"
 # include <stdarg.h>
 #include <stdio.h>
 
@@ -326,6 +327,7 @@ void BM_IA_conquistar_territorio(int _indexHexagono) {
 	ia->hexagonoAtual = campo->hexagonos[_indexHexagono].id;
 	ia->quantidadeTerritorio++;
 	BM_Rodada_avancar();
+	BM_Jogo_verificar_fim();
 	BM_IA_executando = FALSE;
 }
 //==========================================================================
@@ -370,6 +372,7 @@ void BM_IA_executar_ataque(int _alvo, int _atacante) {
 	}
 	campo->hexagonos[_alvo].alvo = HEXAGONO_NORMAL;
 	BM_Rodada_avancar();
+	BM_Jogo_verificar_fim();
 	BM_IA_executando = FALSE;
 }
 //==========================================================================

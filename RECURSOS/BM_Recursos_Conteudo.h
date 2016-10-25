@@ -40,6 +40,7 @@ enum ENUM_SPRITES
 // ENUM = Enumeração das fontes disponiveis
 //==========================================================================
 enum ENUM_FONTES {
-	BM_FONTE_ALBA
+	BM_FONTE_ALBA,
+	BM_FONTE_ALBA_MENOR
 };
 //==========================================================================
