@@ -130,7 +130,7 @@ void BM_Evento_alvo(void *_parametro) {
 		 if (mouse != NULL) {
 			 id = *(int*)mouse->opcional;
 			 hexagono = &campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
-			 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual))
+			 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual, JOGADOR, ADVERSARIO))
 			 {
 			 case VITORIA_ATAQUE:
 				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);

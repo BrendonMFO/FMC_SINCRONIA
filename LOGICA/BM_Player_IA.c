@@ -241,7 +241,7 @@ void BM_IA_disparar() {
 	//======================================================================
 	if (ataque == TRUE && conquista == TRUE) {
 		decisao = (rand() % 100) + 1;
-		if (decisao >= 0 && decisao <= 70) {
+		if (decisao >= 0 && decisao <= 55) {
 			BM_IA_iniciar_acao(BM_IA_aguardar_ataque, 1, BM_IA_executar(&arvoreAtaque.raiz)->hexagono);
 		}
 		else
@@ -358,7 +358,7 @@ void BM_IA_preparar_ataque(int _indexHexagono) {
 //==========================================================================
 void BM_IA_executar_ataque(int _alvo, int _atacante) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	switch (BM_Hexagono_batalha(campo->hexagonos[_alvo].id, _atacante))
+	switch (BM_Hexagono_batalha(campo->hexagonos[_alvo].id, _atacante, ADVERSARIO, JOGADOR))
 	{
 	case VITORIA_ATAQUE:
 		campo->hexagonos[_alvo].estado = ADVERSARIO;
@@ -440,6 +440,9 @@ void BM_IA_iniciar_acao(BM_EVENTO_FUNCAO _funcao, int _quantidade, ...) {
 }
 //==========================================================================
 
+//==========================================================================
+// Aguardar para ação de ataque
+//==========================================================================
 void BM_IA_aguardar_ataque(void *_parametro) {
 	if (BM_IA_acao.tempoAtual >= BM_IA_acao.tempoFrames) {
 		BM_Eventos_Funcoes_remover(BM_IA_aguardar_ataque);
@@ -448,7 +451,11 @@ void BM_IA_aguardar_ataque(void *_parametro) {
 	else
 		BM_IA_acao.tempoAtual++;
 }
+//==========================================================================
 
+//==========================================================================
+// Aguardar para ação de escolha
+//==========================================================================
 void BM_IA_aguardar_escolha(void *_parametro) {
 	int *parametro;
 	if (BM_IA_acao.tempoAtual >= BM_IA_acao.tempoFrames) {
@@ -459,7 +466,12 @@ void BM_IA_aguardar_escolha(void *_parametro) {
 	else
 		BM_IA_acao.tempoAtual++;
 }
+//==========================================================================
 
+//==========================================================================
+// Retornar estado atual da IA
+//==========================================================================
 int BM_IA_get_executando() {
 	return BM_IA_executando;
 }
+//==========================================================================

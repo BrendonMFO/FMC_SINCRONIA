@@ -57,7 +57,7 @@ void BM_Hexagono_alterar(BM_HEXAGONO *_hexagono, int _estado, int _elemento) {
 //==========================================================================
 // Dominar territorio
 //==========================================================================
-int BM_Hexagono_batalha(int _alvo, int _atacante) {
+int BM_Hexagono_batalha(int _alvo, int _atacante, int _playerAtaque, int _playerDefesa) {
 	int resultadoAtaque = 0, resultadoDefesa = 0;
 	BM_Campo *campo = BM_Campo_getCampo();
 	BM_HEXAGONO *hexagonoAtaque, *hexagonoDefesa;
@@ -95,8 +95,8 @@ int BM_Hexagono_batalha(int _alvo, int _atacante) {
 	//======================================================================
 	// Calcular poder das sincronias
 	//======================================================================
-	resultadoAtaque += BM_Hexagono_calcular_sincronia(*hexagonoAtaque, JOGADOR);
-	resultadoDefesa += BM_Hexagono_calcular_sincronia(*hexagonoDefesa, ADVERSARIO);
+	resultadoAtaque += BM_Hexagono_calcular_sincronia(*hexagonoAtaque, _playerAtaque);
+	resultadoDefesa += BM_Hexagono_calcular_sincronia(*hexagonoDefesa, _playerDefesa);
 	//======================================================================
 
 	//======================================================================

@@ -70,7 +70,7 @@ int BM_Hexagono_marcar_alvos(int _centro, int _acao);
 //==========================================================================
 // Dominar territorio
 //==========================================================================
-int BM_Hexagono_batalha(int _alvo, int _atacante);
+int BM_Hexagono_batalha(int _alvo, int _atacante, int _playerAtaque, int _playerDefesa);
 //==========================================================================
 
 //==========================================================================

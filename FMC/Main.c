@@ -3,20 +3,28 @@
 #include "BM_FMC_Carregar.h"
 #include "BM_Loop_principal.h"
 
-int main()
+int main(int argc, char *argv[])
 {
 	//==========================================================================
 	// Variaveis
 	//==========================================================================
 	ALLEGRO_DISPLAY *janela = NULL;
-	int largura, altura;
+	int largura, altura, flag;
 	//==========================================================================
 
 	//==========================================================================
 	// Definir janela
 	//==========================================================================
-	printf("Digite a LARGURA x ALTURA da janela: ");
-	scanf("%d %d", &largura, &altura);
+	if (argc == 4) {
+		sscanf(argv[1], "%d", &largura);
+		sscanf(argv[2], "%d", &altura);
+		sscanf(argv[3], "%d", &flag);
+	}
+	else {
+		largura = 1280;
+		altura = 720;
+		flag = FALSE;
+	}
 	BM_Janela_setar_dados(largura, altura);
 	//==========================================================================
 
@@ -32,7 +40,7 @@ int main()
 	//==========================================================================
 	// Criar e configurar janela
 	//==========================================================================
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	if(flag == TRUE) al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	BM_Allegro_criar_janela(&janela, largura, altura);
 	BM_Eventos_iniciar(janela);
 	al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -44,7 +52,12 @@ int main()
 	BM_Loop(janela);
 	//==========================================================================
 
+	//==========================================================================
+	// Finalizar jogo
+	//==========================================================================
 	al_destroy_display(janela);
+	BM_Recursos_destruir();
+	//==========================================================================
 
 	return 0;
 

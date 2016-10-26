@@ -158,3 +158,29 @@ int BM_Recursos_checar_arquivos() {
 	return SUCESSO;
 }
 //==========================================================================
+
+//==========================================================================
+// Destruir arquivos
+//==========================================================================
+void BM_Recursos_destruir() {
+	int i;
+	for (i = 0; i < QUANTIDADE_SPRITES; i++) {
+		if (BM_VETOR_SPRITES[i] != NULL) {
+			printf("ERRO: Nao foi possivel carregar todas as fontes\n");
+			al_destroy_bitmap(BM_VETOR_SPRITES[i]->imagem->bitmap);
+		}
+	}
+	for (i = 0; i < QUANTIDADE_FONTES; i++) {
+		if (BM_VETOR_FONTES[i] != NULL) {
+			printf("ERRO: Nao foi possivel carregar todas as fontes\n");
+			al_destroy_font(BM_VETOR_FONTES[i]);
+		}
+	}
+	for (i = 0; i < QUANTIDADE_TUTORIAL; i++) {
+		if (BM_VETOR_TUTORIAL[i] != NULL) {
+			printf("ERRO: Nao foi possivel carregar todas as imagens\n");
+			al_destroy_bitmap(BM_VETOR_TUTORIAL[i]->imagem->bitmap);
+		}
+	}
+}
+//==========================================================================
