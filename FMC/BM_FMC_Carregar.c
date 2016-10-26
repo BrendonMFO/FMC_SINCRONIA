@@ -1,4 +1,6 @@
 #include "BM_FMC_Carregar.h"
+#include "BM_Recursos_Animacao.h"
+#include "BM_Renders.h"
 
 //==========================================================================
 // Prototipos

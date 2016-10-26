@@ -88,5 +88,5 @@ void BM_Hexagono_marcar_sincronia();
 //==========================================================================
 // Desmarcar sincronia entre os hexagonos
 //==========================================================================
-void BM_Hexagono_marcar_sincronia();
+void BM_Hexagono_desmarcar_sincronia();
 //==========================================================================

@@ -2,6 +2,7 @@
 #include "BM_Campo.h"
 #include "BM_Allegro_eventos_mouse.h"
 #include "BM_Allegro.h"
+#include "BM_Allegro_janela.h"
 #include "BM_Recursos.h"
 #include "BM_Elemento.h"
 #include "BM_Recursos_Animacao.h"
@@ -186,8 +187,8 @@ void BM_Hexagono_desmarcar_sincronia() {
 //==========================================================================
 void BM_Hexagono_adicionar_listener_mouse(BM_HEXAGONO *_alvo, int _acao) {
 	int finalX, finalY, *id;
-	finalX = _alvo->posicaoX + BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->bitmap);
-	finalY = _alvo->posicaoY + BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO_ALVO)->imagem->bitmap);
+	finalX = _alvo->posicaoX + SPRITES(BM_IMG_HEXAGONO_ALVO)->ajusteW;
+	finalY = _alvo->posicaoY + SPRITES(BM_IMG_HEXAGONO_ALVO)->ajusteH;
 	switch (_acao)
 	{
 	case HEXAGONO_ALVO:
@@ -227,22 +228,22 @@ void BM_Hexagono_adicionar_animacao(BM_HEXAGONO *_alvo) {
 	switch (_alvo->elemento)
 	{
 	case LUZ:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_LUZ), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_LUZ), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 		break;
 	case TREVAS:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_TREVAS), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_TREVAS), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 		break;
 	case FOGO:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_FOGO), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_FOGO), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 		break;
 	case AGUA:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_AGUA), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_AGUA), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 		break;
 	case TERRA:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_TERRA), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_TERRA), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 		break;
 	case AR:
-		BM_Animacao_adicionar(SPRITES(BM_ANI_AR), 250, 250, _alvo->posicaoX, _alvo->posicaoY - 20, 0.5);
+		BM_Animacao_adicionar(SPRITES(BM_ANI_AR), 250, 250, (_alvo->posicaoX), (_alvo->posicaoY - BM_AJUSTE_YH(20)), 0.5);
 	}
 }
 //==========================================================================

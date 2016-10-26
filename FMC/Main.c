@@ -1,4 +1,4 @@
-
+#include "BM_Allegro_janela.h"
 #include "BM_Allegro_Imagens.h"
 #include "BM_FMC_Carregar.h"
 #include "BM_Loop_principal.h"
@@ -9,6 +9,15 @@ int main()
 	// Variaveis
 	//==========================================================================
 	ALLEGRO_DISPLAY *janela = NULL;
+	int largura, altura;
+	//==========================================================================
+
+	//==========================================================================
+	// Definir janela
+	//==========================================================================
+	printf("Digite a LARGURA x ALTURA da janela: ");
+	scanf("%d %d", &largura, &altura);
+	BM_Janela_setar_dados(largura, altura);
 	//==========================================================================
 
 	//==========================================================================
@@ -23,7 +32,8 @@ int main()
 	//==========================================================================
 	// Criar e configurar janela
 	//==========================================================================
-	BM_Allegro_criar_janela(&janela, 1600, 920);
+	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	BM_Allegro_criar_janela(&janela, largura, altura);
 	BM_Eventos_iniciar(janela);
 	al_clear_to_color(al_map_rgb(255, 255, 255));
 	//==========================================================================

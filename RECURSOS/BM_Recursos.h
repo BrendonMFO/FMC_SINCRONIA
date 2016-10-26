@@ -9,6 +9,7 @@
 #define ERRO 0
 #define SUCESSO 1
 #define QUANTIDADE_SPRITES 12
+#define QUANTIDADE_TUTORIAL 10
 #define QUANTIDADE_FONTES 2
 #define SPRITES(INDICE) BM_Recursos_obter_recurso((INDICE))
 //==========================================================================
@@ -28,7 +29,7 @@ ALLEGRO_FONT *BM_Recursos_obter_fonte(int _indice);
 //==========================================================================
 // Obter sprite do tutorial
 //==========================================================================
-ALLEGRO_BITMAP *BM_Recursos_obter_tutorial(int _indice);
+BM_SPRITES *BM_Recursos_obter_tutorial(int _indice);
 //==========================================================================
 
 //==========================================================================

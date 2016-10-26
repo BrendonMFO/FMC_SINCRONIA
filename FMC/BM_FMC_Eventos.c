@@ -227,7 +227,7 @@ void BM_Evento_reiniciar(void *_parametro) {
 			BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
 			BM_Eventos_Funcoes_remover(BM_Evento_reiniciar);
 			BM_Render_remover_funcao(BM_Render_resultado);
-			BM_FMC_Evento_inicial();
+			BM_Iniciar();
 			break;
 		}
 		break;

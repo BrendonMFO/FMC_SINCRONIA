@@ -1,6 +1,7 @@
 #include "BM_Player.h"
 #include "BM_Allegro_eventos.h"
 #include "BM_Allegro_eventos_funcoes.h"
+#include "BM_Allegro_janela.h"
 #include "BM_Campo.h"
 #include "BM_Recursos.h"
 #include <stdio.h>
@@ -142,10 +143,10 @@ void BM_Player_mover(BM_PLAYER *_player, int _mouseX, int _mouseY) {
 	int i, j, pos, largura, altura;
 	for (i = 0; i < campo->quantidade; i++) {
 		hexagono = &campo->hexagonos[i];
-		largura = hexagono->posicaoX + BM_Allegro_largura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesColunas;
-		altura = hexagono->posicaoY + BM_Allegro_altura_da_imagem(SPRITES(BM_IMG_HEXAGONO)->Imagem) / SPRITES(BM_IMG_HEXAGONO)->imagem->framesLinhas;
-		if (_mouseX >= hexagono->posicaoX && _mouseX <= largura &&
-			_mouseY >= hexagono->posicaoY && _mouseY <= altura) {
+		largura = BM_AJUSTE_XW(hexagono->posicaoX) + SPRITES(BM_IMG_HEXAGONO)->ajusteW;
+		altura = BM_AJUSTE_YH(hexagono->posicaoY) + SPRITES(BM_IMG_HEXAGONO)->ajusteH;
+		if (_mouseX >= BM_AJUSTE_XW(hexagono->posicaoX) && _mouseX <= largura &&
+			_mouseY >= BM_AJUSTE_YH(hexagono->posicaoY) && _mouseY <= altura) {
 			break;
 		}
 	}

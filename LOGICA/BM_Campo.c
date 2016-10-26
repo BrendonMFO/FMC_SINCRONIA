@@ -1,4 +1,8 @@
 #include "BM_Campo.h"
+#include "BM_Allegro_janela.h"
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 //==========================================================================
 // Variavel que ira conter os dados do campo

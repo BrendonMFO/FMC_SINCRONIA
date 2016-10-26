@@ -1,22 +1,25 @@
 #include "BM_Recursos.h"
 #include "BM_Recursos_Conteudo.h"
 #include "BM_Allegro.h"
+#include "BM_Allegro_janela.h"
 #include <stdio.h>
 
 //==========================================================================
 // Macros
 //==========================================================================
-#define NEW_SPRITE(CAMINHO,LINHA,COLUNA) BM_VETOR_SPRITES[indexSprite] = carregar_sprite((CAMINHO), (LINHA), (COLUNA))
-#define NEW_FONT(FONTE,TAMANHO,FLAG) BM_Allegro_carregar_font(&BM_VETOR_FONTES[++indexFonte], (FONTE), (TAMANHO), (FLAG));
+#define NEW_SPRITE(CAMINHO,LINHA,COLUNA) BM_VETOR_SPRITES[++indexSprite] = carregar_sprite((CAMINHO), (LINHA), (COLUNA))
+#define NEW_TUTORIAL(CAMINHO) BM_VETOR_TUTORIAL[++indexTutorial] = carregar_sprite((CAMINHO), 1, 1);
+#define NEW_FONT(FONTE,TAMANHO,FLAG) BM_Allegro_carregar_font(&BM_VETOR_FONTES[++indexFonte], (FONTE), ((TAMANHO) * (BM_Janela_obter_dados().largura * BM_Janela_obter_dados().altura)) / (1600 * 920), (FLAG));
 //==========================================================================
 
 //==========================================================================
 // Variaveis globais com os recursos disponiveis
 //==========================================================================
 BM_SPRITES *BM_VETOR_SPRITES[QUANTIDADE_SPRITES];
-ALLEGRO_BITMAP *BM_VETOR_TUTORIAL[10];
+BM_SPRITES *BM_VETOR_TUTORIAL[QUANTIDADE_TUTORIAL];
 ALLEGRO_FONT *BM_VETOR_FONTES[QUANTIDADE_FONTES];
 int indexSprite = -1;
+int indexTutorial = -1;
 int indexFonte = -1;
 //==========================================================================
 
@@ -50,7 +53,7 @@ ALLEGRO_FONT *BM_Recursos_obter_fonte(int _indice) {
 //==========================================================================
 // Obter sprite do tutorial
 //==========================================================================
-ALLEGRO_BITMAP *BM_Recursos_obter_tutorial(int _indice)
+BM_SPRITES *BM_Recursos_obter_tutorial(int _indice)
 {
 	return BM_VETOR_TUTORIAL[_indice];
 }
@@ -100,16 +103,16 @@ void BM_Recursos_carregar_fonte() {
 // Carregar arquivos de tutorial
 //==========================================================================
 void BM_Recursos_carregar_tutorial() {
-	BM_VETOR_TUTORIAL[0] = al_load_bitmap("Recursos\\Tutorial\\Img0.png");
-	BM_VETOR_TUTORIAL[1] = al_load_bitmap("Recursos\\Tutorial\\Img1.png");
-	BM_VETOR_TUTORIAL[2] = al_load_bitmap("Recursos\\Tutorial\\Img2.png");
-	BM_VETOR_TUTORIAL[3] = al_load_bitmap("Recursos\\Tutorial\\Img3.png");
-	BM_VETOR_TUTORIAL[4] = al_load_bitmap("Recursos\\Tutorial\\Img4.png");
-	BM_VETOR_TUTORIAL[5] = al_load_bitmap("Recursos\\Tutorial\\Img5.png");
-	BM_VETOR_TUTORIAL[6] = al_load_bitmap("Recursos\\Tutorial\\Img6.png");
-	BM_VETOR_TUTORIAL[7] = al_load_bitmap("Recursos\\Tutorial\\Img7.png");
-	BM_VETOR_TUTORIAL[8] = al_load_bitmap("Recursos\\Tutorial\\Img8.png");
-	BM_VETOR_TUTORIAL[9] = al_load_bitmap("Recursos\\Tutorial\\Img9.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img0.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img1.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img2.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img3.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img4.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img5.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img6.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img7.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img8.png");
+	NEW_TUTORIAL("Recursos\\Tutorial\\Img9.png");
 }
 //==========================================================================
 
@@ -123,7 +126,8 @@ BM_SPRITES *carregar_sprite(char *_arquivo, int _framesLinhas, int _framesColuna
 		fprintf(stderr, "Erro ao carregar Sprite : %s\n", _arquivo);
 		return NULL;
 	}
-	indexSprite++;
+	temp->ajusteW = ((BM_Allegro_largura_da_imagem(temp->imagem->bitmap) / _framesColunas) * BM_Janela_obter_dados().largura) / 1600;
+	temp->ajusteH = ((BM_Allegro_altura_da_imagem(temp->imagem->bitmap) / _framesLinhas) * BM_Janela_obter_dados().altura) / 920;
 	return temp;
 }
 //==========================================================================
@@ -145,7 +149,7 @@ int BM_Recursos_checar_arquivos() {
 			return ERRO;
 		}
 	}
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < QUANTIDADE_TUTORIAL; i++) {
 		if (BM_VETOR_TUTORIAL[i] == NULL) {
 			printf("ERRO: Nao foi possivel carregar todas as imagens\n");
 			return ERRO;

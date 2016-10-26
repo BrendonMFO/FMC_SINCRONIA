@@ -1,4 +1,5 @@
 #include "BM_Allegro_eventos_mouse.h"
+#include "BM_Allegro_janela.h"
 #include <string.h>
 
 //==========================================================================
@@ -37,10 +38,10 @@ int BM_Eventos_Mouse_adicionar(BM_MOUSE_FUNCAO _funcao, int _iX, int _iY, int _f
 		fprintf(stderr, "ERRO: Nao foi possivel alocar memoria para um evento do mouse\n");
 		return ERRO;
 	}
-	aux->inicial_X = _iX;
-	aux->inicial_Y = _iY;
-	aux->final_X = _fX;
-	aux->final_Y = _fY;
+	aux->inicial_X = BM_AJUSTE_XW(_iX);
+	aux->inicial_Y = BM_AJUSTE_YH(_iY);
+	aux->final_X = BM_AJUSTE_XW(_fX);
+	aux->final_Y = BM_AJUSTE_YH(_fY);
 	aux->funcao = _funcao;
 	aux->opcional = _opcional;
 	aux->anterior = NULL;

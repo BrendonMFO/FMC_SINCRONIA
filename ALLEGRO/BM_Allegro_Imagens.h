@@ -8,8 +8,10 @@
 //==========================================================================
 typedef struct BM_IMAGEM_S {
 	ALLEGRO_BITMAP *bitmap;
-	int				framesLinhas;
-	int             framesColunas;
+	int				frame_largura;
+	int				frame_altura;
+	int				sprite_linhas;
+	int             sprite_colunas;
 }BM_IMAGEM;
 //==========================================================================
 

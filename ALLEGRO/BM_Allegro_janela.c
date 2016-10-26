@@ -1,21 +1,24 @@
-#pragma once
-
-#include "BM_Allegro.h"
+#include "BM_Allegro_janela.h"
 
 //==========================================================================
-// Set Rodadas
+// Variaveis
 //==========================================================================
-void BM_Rodada_set(int _quantidade);
+BM_JANELA dados_janela;
 //==========================================================================
 
 //==========================================================================
-// Get Rodadas restantes
+// Obter dados da janela
 //==========================================================================
-int BM_Rodada_get_restantes();
+BM_JANELA BM_Janela_obter_dados() {
+	return dados_janela;
+}
 //==========================================================================
 
 //==========================================================================
-// Avançar rodadas
+// Setar dados da janela
 //==========================================================================
-void BM_Rodada_avancar();
+void BM_Janela_setar_dados(int _largura, int _altura) {
+	dados_janela.largura = _largura;
+	dados_janela.altura = _altura;
+}
 //==========================================================================

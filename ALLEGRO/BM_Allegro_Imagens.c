@@ -7,8 +7,10 @@ BM_IMAGEM *BM_Allegro_carregar_imagem(char *img_path, int _framesLinhas, int _fr
 	BM_IMAGEM *temp = (BM_IMAGEM*)malloc(1 * sizeof(BM_IMAGEM));
 	temp->bitmap = al_load_bitmap(img_path);
 	if (!temp->bitmap) return NULL;
-	temp->framesLinhas = _framesLinhas;
-	temp->framesColunas = _framesColunas;
+	temp->frame_largura = BM_Allegro_largura_da_imagem(temp->bitmap) / _framesColunas;
+	temp->frame_altura = BM_Allegro_altura_da_imagem(temp->bitmap) / _framesLinhas;
+	temp->sprite_linhas = _framesLinhas;
+	temp->sprite_colunas = _framesColunas;
 	return temp;
 }
 //==========================================================================
