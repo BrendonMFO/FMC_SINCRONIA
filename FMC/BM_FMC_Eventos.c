@@ -27,6 +27,7 @@ void BM_Iniciar();
 void BM_Iniciar() {
 	BM_Rodada_set(50);
 	BM_Player_iniciar_valores(0);
+	BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
 	BM_Render_remover_funcao(BM_Render_tutorial);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 	BM_Render_adicionar_funcao(BM_Render_rodada);
@@ -46,7 +47,6 @@ void BM_FMC_Evento_inicial() {
 // Verificar se o jogo possue um vencedor
 //==========================================================================
 void BM_Jogo_verificar_fim() {
-	int a = BM_Rodada_get_restantes();
 	if (BM_Rodada_get_restantes() == 0 || 
 		BM_Player_getJogador()->quantidadeTerritorio == 0 ||
 		BM_Player_getIAPlayer()->quantidadeTerritorio == 0) {
@@ -154,7 +154,8 @@ void BM_Evento_alvo(void *_parametro) {
 			 }
 			 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
 			 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
-			 BM_IA_disparar();
+			 if(BM_Player_getIAPlayer()->quantidadeTerritorio > 0) BM_IA_disparar();
+			 else BM_Jogo_verificar_fim();
 		 }
 		break;
 	case ALLEGRO_EVENT_KEY_DOWN:
