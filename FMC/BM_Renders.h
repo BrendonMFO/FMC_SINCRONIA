@@ -14,6 +14,7 @@ typedef void(*BM_RENDER_FUNCAO)(void*, ...);
 typedef struct BM_RENDER_S {
 	int ativo;
 	BM_RENDER_FUNCAO funcao;
+	void *parametro;
 	struct BM_RENDER_S *anterior;
 	struct BM_RENDER_S *proximo;
 }BM_RENDER;
@@ -38,7 +39,7 @@ int BM_Render_iniciar_fila();
 //==========================================================================
 // Adicionar função na fila de renderização
 //==========================================================================
-int BM_Render_adicionar_funcao(BM_RENDER_FUNCAO _funcao);
+int BM_Render_adicionar_funcao(BM_RENDER_FUNCAO _funcao, void *_parametro);
 //==========================================================================
 
 //==========================================================================
@@ -56,25 +57,25 @@ void BM_Render_principal();
 //==========================================================================
 // Renderizar elementos
 //==========================================================================
-void BM_Render_elementos(void *_parametro, ...);
+void BM_Render_elementos(void *_parametro);
 //==========================================================================
 
 //==========================================================================
 // Renderizar Rodada
 //==========================================================================
-void BM_Render_rodada(void *_parametro, ...);
+void BM_Render_rodada(void *_parametro);
 //==========================================================================
 
 //==========================================================================
 // Renderizar resultado
 //==========================================================================
-void BM_Render_resultado(void *_parametro, ...);
+void BM_Render_resultado(void *_parametro);
 //==========================================================================
 
 //==========================================================================
 // Renderizar tutorial
 //==========================================================================
-void BM_Render_tutorial(void *_parametro, ...);
+void BM_Render_tutorial(void *_parametro);
 //==========================================================================
 
 //==========================================================================

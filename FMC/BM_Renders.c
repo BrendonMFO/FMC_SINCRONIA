@@ -23,6 +23,13 @@ int TUTORIAL = 0;
 //==========================================================================
 
 //==========================================================================
+// Matriz de render dos hexagonos na batalha
+//==========================================================================
+const int BM_BATALHA_JOGADOR[7][2] = { { 230, 122 },{ 405, 229 },{ 406, 436 },
+{ 229, 534 },{ 49, 427 },{ 50, 221 },{ 229, 327 } };
+//==========================================================================
+
+//==========================================================================
 // Prototipos para funções de renders
 //==========================================================================
 void BM_Render_normal(BM_SPRITES *_sprite, int _x, int _y, int _flag);
@@ -108,13 +115,14 @@ int BM_Render_iniciar_fila() {
 //==========================================================================
 // Adicionar função na fila de renderização
 //==========================================================================
-int BM_Render_adicionar_funcao(BM_RENDER_FUNCAO _funcao) {
+int BM_Render_adicionar_funcao(BM_RENDER_FUNCAO _funcao, void *_parametro) {
 	BM_RENDER *aux = (BM_RENDER*)malloc(1 * sizeof(BM_RENDER));
 	if (aux == NULL) {
 		printf("ERRO: Nao foi possivel alocar memoria para uma funcao de renderizacao\n");
 		return ERRO;
 	}
 	aux->funcao = _funcao;
+	aux->parametro = _parametro;
 	aux->ativo = SIM;
 	aux->proximo = NULL;
 	if (renderFila->inicio == NULL) {
@@ -242,7 +250,7 @@ void BM_Render_player_ia() {
 //==========================================================================
 // Renderizar Elementos
 //==========================================================================
-void BM_Render_elementos(void *_parametro, ...) {
+void BM_Render_elementos(void *_parametro) {
 	int sourceW, sourceH, sourceX, destinoX, i, *elemento;
 	al_draw_filled_rectangle(0, 0, BM_Janela_obter_dados().largura, BM_Janela_obter_dados().altura, al_map_rgba(0, 0, 0, 150));
 	elemento = &BM_Player_getJogador()->elementosDisponivel.luz;
@@ -263,7 +271,7 @@ void BM_Render_elementos(void *_parametro, ...) {
 //==========================================================================
 // Renderizar Rodada
 //==========================================================================
-void BM_Render_rodada(void *_parametro, ...) {
+void BM_Render_rodada(void *_parametro) {
 	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA_MENOR), al_map_rgb(225, 225, 225), BM_AJUSTE_XW(1100), BM_AJUSTE_YH(850), ALLEGRO_ALIGN_LEFT, "A - Atacar S - Adicionar", BM_Rodada_get_restantes());
 	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), BM_AJUSTE_XW(100), BM_AJUSTE_YH(10), ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
 }
@@ -272,7 +280,7 @@ void BM_Render_rodada(void *_parametro, ...) {
 //==========================================================================
 // Renderizar resultado
 //==========================================================================
-void BM_Render_resultado(void *_parametro, ...) {
+void BM_Render_resultado(void *_parametro) {
 	int jogador = BM_Player_getJogador()->quantidadeTerritorio;
 	int ia = BM_Player_getIAPlayer()->quantidadeTerritorio;
 	char texto[10];
@@ -292,7 +300,7 @@ void BM_Render_resultado(void *_parametro, ...) {
 //==========================================================================
 // Renderizar tutorial
 //==========================================================================
-void BM_Render_tutorial(void *_parametro, ...) {
+void BM_Render_tutorial(void *_parametro) {
 	al_draw_filled_rectangle(0, 0, BM_Janela_obter_dados().largura, BM_Janela_obter_dados().altura, al_map_rgba(0, 0, 0, 220));
 	BM_Render_normal(BM_Recursos_obter_tutorial(TUTORIAL), 0, 0, 0);
 }
@@ -320,7 +328,7 @@ int BM_Render_obter_tutorial() {
 void BM_Render_renderizar_fila() {
 	BM_RENDER *aux;
 	for (aux = renderFila->inicio; aux != NULL; aux = aux->proximo)
-		aux->funcao(NULL);
+		aux->funcao(aux->parametro);
 }
 //==========================================================================
 

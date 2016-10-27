@@ -30,7 +30,7 @@ void BM_Iniciar() {
 	BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
 	BM_Render_remover_funcao(BM_Render_tutorial);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
-	BM_Render_adicionar_funcao(BM_Render_rodada);
+	BM_Render_adicionar_funcao(BM_Render_rodada, NULL);
 }
 //==========================================================================
 
@@ -39,7 +39,7 @@ void BM_Iniciar() {
 //==========================================================================
 void BM_FMC_Evento_inicial() {
 	BM_Eventos_Funcoes_adicionar(BM_Evento_tutorial, NULL);
-	BM_Render_adicionar_funcao(BM_Render_tutorial);
+	BM_Render_adicionar_funcao(BM_Render_tutorial, NULL);
 }
 //==========================================================================
 
@@ -50,7 +50,7 @@ void BM_Jogo_verificar_fim() {
 	if (BM_Rodada_get_restantes() == 0 || 
 		BM_Player_getJogador()->quantidadeTerritorio == 0 ||
 		BM_Player_getIAPlayer()->quantidadeTerritorio == 0) {
-		BM_Render_adicionar_funcao(BM_Render_resultado);
+		BM_Render_adicionar_funcao(BM_Render_resultado, NULL);
 		BM_Eventos_Funcoes_remover(BM_Evento_jogador);
 		BM_Eventos_Funcoes_adicionar(BM_Evento_reiniciar, NULL);
 	}
@@ -103,7 +103,7 @@ void BM_Evento_jogador(void *_parametro) {
 			case ALLEGRO_KEY_S:
 				if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado != ADVERSARIO) {
 					BM_Elemento_adicionar_mouse_listener();
-					BM_Render_adicionar_funcao(BM_Render_elementos);
+					BM_Render_adicionar_funcao(BM_Render_elementos, NULL);
 					BM_Eventos_Funcoes_remover(BM_Evento_jogador);
 					BM_Eventos_Funcoes_adicionar(BM_Evento_escolha, NULL);
 				}
@@ -129,33 +129,35 @@ void BM_Evento_alvo(void *_parametro) {
 		 mouse = BM_Eventos_Mouse_processar(aux.mouse.x, aux.mouse.y);
 		 if (mouse != NULL) {
 			 id = *(int*)mouse->opcional;
-			 hexagono = &campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
-			 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual, JOGADOR, ADVERSARIO))
-			 {
-			 case VITORIA_ATAQUE:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-				 BM_Hexagono_desmarcar_sincronia();
-				 campo->hexagonos[id].estado = JOGADOR;
-				 BM_Player_getJogador()->hexagonoAtual = id;
-				 BM_Player_getJogador()->quantidadeTerritorio++;
-				 BM_Player_getIAPlayer()->quantidadeTerritorio--;
-				 break;
-			 case VITORIA_DEFESA:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-				 BM_Hexagono_desmarcar_sincronia();
-				 campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = ADVERSARIO;
-				 BM_Player_getJogador()->quantidadeTerritorio--;
-				 BM_Player_getIAPlayer()->quantidadeTerritorio++;
-				 break;
-			 case EMPATE:
-				 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-				 BM_Hexagono_desmarcar_sincronia();
-				 break;
+			 if (campo->hexagonos[id].estado == ADVERSARIO) {
+				 hexagono = &campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
+				 switch (BM_Hexagono_batalha(id, BM_Player_getJogador()->hexagonoAtual, JOGADOR, ADVERSARIO))
+				 {
+				 case VITORIA_ATAQUE:
+					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+					 BM_Hexagono_desmarcar_sincronia();
+					 campo->hexagonos[id].estado = JOGADOR;
+					 BM_Player_getJogador()->hexagonoAtual = id;
+					 BM_Player_getJogador()->quantidadeTerritorio++;
+					 BM_Player_getIAPlayer()->quantidadeTerritorio--;
+					 break;
+				 case VITORIA_DEFESA:
+					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+					 BM_Hexagono_desmarcar_sincronia();
+					 campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = ADVERSARIO;
+					 BM_Player_getJogador()->quantidadeTerritorio--;
+					 BM_Player_getIAPlayer()->quantidadeTerritorio++;
+					 break;
+				 case EMPATE:
+					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
+					 BM_Hexagono_desmarcar_sincronia();
+					 break;
+				 }
+				 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
+				 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
+				 if (BM_Player_getIAPlayer()->quantidadeTerritorio > 0) BM_IA_disparar();
+				 else BM_Jogo_verificar_fim();
 			 }
-			 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
-			 BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
-			 if(BM_Player_getIAPlayer()->quantidadeTerritorio > 0) BM_IA_disparar();
-			 else BM_Jogo_verificar_fim();
 		 }
 		break;
 	case ALLEGRO_EVENT_KEY_DOWN:
