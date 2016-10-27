@@ -272,7 +272,7 @@ void BM_Render_elementos(void *_parametro) {
 // Renderizar Rodada
 //==========================================================================
 void BM_Render_rodada(void *_parametro) {
-	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA_MENOR), al_map_rgb(225, 225, 225), BM_AJUSTE_XW(1100), BM_AJUSTE_YH(850), ALLEGRO_ALIGN_LEFT, "A - Atacar S - Adicionar", BM_Rodada_get_restantes());
+	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA_MENOR), al_map_rgb(225, 225, 225), BM_AJUSTE_XW(1000), BM_AJUSTE_YH(850), ALLEGRO_ALIGN_LEFT, "A - Atacar S - Adicionar T - Tutorial", BM_Rodada_get_restantes());
 	al_draw_textf(BM_Recursos_obter_fonte(BM_FONTE_ALBA), al_map_rgb(255, 200, 200), BM_AJUSTE_XW(100), BM_AJUSTE_YH(10), ALLEGRO_ALIGN_CENTRE, "%d", BM_Rodada_get_restantes());
 }
 //==========================================================================
@@ -311,6 +311,14 @@ void BM_Render_tutorial(void *_parametro) {
 //==========================================================================
 void BM_Render_avancar_tutorial() {
 	TUTORIAL++;
+}
+//==========================================================================
+
+//==========================================================================
+// Reiniciar tutorial
+//==========================================================================
+void BM_Render_reiniciar_tutorial() {
+	TUTORIAL = 0;
 }
 //==========================================================================
 

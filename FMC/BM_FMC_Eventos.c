@@ -11,6 +11,12 @@
 #include "BM_Hexagono.h"
 
 //==========================================================================
+// Variaveis 
+//==========================================================================
+int executando = FALSE;
+//==========================================================================
+
+//==========================================================================
 // Prototipos
 //==========================================================================
 void BM_Evento_tutorial(void *_parametro);
@@ -25,11 +31,15 @@ void BM_Iniciar();
 // Iniciar jogo
 //==========================================================================
 void BM_Iniciar() {
-	BM_Rodada_set(50);
-	BM_Player_iniciar_valores(0);
-	BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
+	if (executando == FALSE) {
+		BM_Rodada_set(50);
+		BM_Player_iniciar_valores(0);
+		BM_IA_iniciar_valores(BM_Campo_getCampo()->quantidade - 1);
+		executando = TRUE;
+	}
 	BM_Render_remover_funcao(BM_Render_tutorial);
 	BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
+	BM_Eventos_Funcoes_remover(BM_Evento_tutorial);
 	BM_Render_adicionar_funcao(BM_Render_rodada, NULL);
 }
 //==========================================================================
@@ -38,6 +48,7 @@ void BM_Iniciar() {
 // Evento inicial
 //==========================================================================
 void BM_FMC_Evento_inicial() {
+	executando = FALSE;
 	BM_Eventos_Funcoes_adicionar(BM_Evento_tutorial, NULL);
 	BM_Render_adicionar_funcao(BM_Render_tutorial, NULL);
 }
@@ -94,7 +105,7 @@ void BM_Evento_jogador(void *_parametro) {
 			case ALLEGRO_KEY_A:
 				if (BM_Campo_getCampo()->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado == JOGADOR) {
 					if (BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_ALVO) > 0) {
-						BM_Hexagono_marcar_sincronia();
+						BM_Hexagono_marcar_sincronia(JOGADOR);
 						BM_Eventos_Funcoes_remover(BM_Evento_jogador);
 						BM_Eventos_Funcoes_adicionar(BM_Evento_alvo, NULL);
 					}
@@ -108,6 +119,12 @@ void BM_Evento_jogador(void *_parametro) {
 					BM_Eventos_Funcoes_adicionar(BM_Evento_escolha, NULL);
 				}
 				break;
+			case ALLEGRO_KEY_T:
+				BM_Render_reiniciar_tutorial();
+				BM_Eventos_Funcoes_remover(BM_Evento_jogador);
+				BM_Eventos_Funcoes_adicionar(BM_Evento_tutorial, NULL);
+				BM_Render_remover_funcao(BM_Render_rodada, NULL);
+				BM_Render_adicionar_funcao(BM_Render_tutorial, NULL);
 			}
 			break;
 		}
@@ -135,7 +152,7 @@ void BM_Evento_alvo(void *_parametro) {
 				 {
 				 case VITORIA_ATAQUE:
 					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-					 BM_Hexagono_desmarcar_sincronia();
+					 BM_Hexagono_desmarcar_sincronia(JOGADOR);
 					 campo->hexagonos[id].estado = JOGADOR;
 					 BM_Player_getJogador()->hexagonoAtual = id;
 					 BM_Player_getJogador()->quantidadeTerritorio++;
@@ -143,14 +160,14 @@ void BM_Evento_alvo(void *_parametro) {
 					 break;
 				 case VITORIA_DEFESA:
 					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-					 BM_Hexagono_desmarcar_sincronia();
+					 BM_Hexagono_desmarcar_sincronia(JOGADOR);
 					 campo->hexagonos[BM_Player_getJogador()->hexagonoAtual].estado = ADVERSARIO;
 					 BM_Player_getJogador()->quantidadeTerritorio--;
 					 BM_Player_getIAPlayer()->quantidadeTerritorio++;
 					 break;
 				 case EMPATE:
 					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-					 BM_Hexagono_desmarcar_sincronia();
+					 BM_Hexagono_desmarcar_sincronia(JOGADOR);
 					 break;
 				 }
 				 BM_Eventos_Funcoes_remover(BM_Evento_alvo);
@@ -164,7 +181,7 @@ void BM_Evento_alvo(void *_parametro) {
 		switch (aux.keyboard.keycode) {
 		case ALLEGRO_KEY_A:
 			BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
-			BM_Hexagono_desmarcar_sincronia();
+			BM_Hexagono_desmarcar_sincronia(JOGADOR);
 			BM_Eventos_Funcoes_remover(BM_Evento_alvo);
 			BM_Eventos_Funcoes_adicionar(BM_Evento_jogador, NULL);
 			break;

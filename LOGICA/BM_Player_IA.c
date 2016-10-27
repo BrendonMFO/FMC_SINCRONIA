@@ -349,6 +349,7 @@ void BM_IA_preparar_ataque(int _indexHexagono) {
 	}
 	i = rand() % contador;
 	campo->hexagonos[possibilidade[i]].alvo = HEXAGONO_ALVO;
+	BM_Hexagono_marcar_sincronia(ADVERSARIO);
 	BM_IA_iniciar_acao(BM_IA_aguardar_escolha, 2, possibilidade[i], _indexHexagono);
 }
 //==========================================================================
@@ -371,6 +372,7 @@ void BM_IA_executar_ataque(int _alvo, int _atacante) {
 		BM_Player_getJogador()->quantidadeTerritorio++;
 	}
 	campo->hexagonos[_alvo].alvo = HEXAGONO_NORMAL;
+	BM_Hexagono_desmarcar_sincronia(ADVERSARIO);
 	BM_Rodada_avancar();
 	BM_Jogo_verificar_fim();
 	BM_IA_executando = FALSE;

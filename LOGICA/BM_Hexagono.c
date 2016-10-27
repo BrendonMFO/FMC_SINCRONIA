@@ -7,6 +7,7 @@
 #include "BM_Elemento.h"
 #include "BM_Recursos_Animacao.h"
 #include "BM_Player.h"
+#include "BM_Player_IA.h"
 #include <stdarg.h>
 
 //==========================================================================
@@ -136,14 +137,18 @@ int BM_Hexagono_marcar_alvos(int _centro, int _acao) {
 //==========================================================================
 // Marcar sincronia entre os hexagonos
 //==========================================================================
-void BM_Hexagono_marcar_sincronia() {
+void BM_Hexagono_marcar_sincronia(int _player) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_HEXAGONO hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual], *aux;
+	BM_HEXAGONO hexagono, *aux;
+	if(_player == JOGADOR)
+		hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
+	else
+		hexagono = campo->hexagonos[BM_Player_getIAPlayer()->hexagonoAtual];
 	int i;
 	for (i = 0; i < 6; i++) {
 		if (hexagono.conexoes[i] != -1) {
 			aux = &campo->hexagonos[hexagono.conexoes[i]];
-			if (aux->estado == JOGADOR) {
+			if (aux->estado == _player) {
 				switch (BM_Sincronia[hexagono.elemento][aux->elemento])
 				{
 				case 2:
@@ -167,14 +172,18 @@ void BM_Hexagono_marcar_sincronia() {
 //==========================================================================
 // Desmarcar sincronia entre os hexagonos
 //==========================================================================
-void BM_Hexagono_desmarcar_sincronia() {
+void BM_Hexagono_desmarcar_sincronia(int _player) {
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_HEXAGONO hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual], *aux;
+	BM_HEXAGONO hexagono, *aux;
+	if (_player == JOGADOR)
+		hexagono = campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
+	else
+		hexagono = campo->hexagonos[BM_Player_getIAPlayer()->hexagonoAtual];
 	int i;
 	for (i = 0; i < 6; i++) {
 		if (hexagono.conexoes[i] != -1) {
 			aux = &campo->hexagonos[hexagono.conexoes[i]];
-			if (aux->estado == JOGADOR) {
+			if (aux->estado == _player) {
 				aux->alvo = HEXAGONO_NORMAL;
 			}
 		}

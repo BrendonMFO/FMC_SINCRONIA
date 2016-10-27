@@ -82,11 +82,11 @@ int BM_Hexagono_calcular_sincronia(BM_HEXAGONO _alvo, int _player);
 //==========================================================================
 // Marcar sincronia entre os hexagonos
 //==========================================================================
-void BM_Hexagono_marcar_sincronia();
+void BM_Hexagono_marcar_sincronia(int _player);
 //==========================================================================
 
 //==========================================================================
 // Desmarcar sincronia entre os hexagonos
 //==========================================================================
-void BM_Hexagono_desmarcar_sincronia();
+void BM_Hexagono_desmarcar_sincronia(int _player);
 //==========================================================================
