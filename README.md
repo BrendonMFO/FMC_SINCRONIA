@@ -1,10 +1,6 @@
 # FMC_SINCRONIA
 Projeto de jogo em C utilizando ALLEGRO 5
-
-//=================================================================================================================
-//                                              Trabalho de FMC
-// Brendon Mike Feliciano de Oliveira
-//=================================================================================================================
+Brendon Mike Feliciano de Oliveira
 
 Este trabalho é focado em um jogo de dominação de territorio apartir de um campo, onde cada territorio é um nó em
 um grafo, representado graficamente como um hexagono onde cada um de seus lados representa uma conexão com o hexagono
@@ -26,8 +22,6 @@ Toda a interface grafica da aplicação foi escrita em linguagem C utilizando a 
 logica de manipulação de recursos graficos, como animação e alocação dos mesmos na memoria, foram de minha autoria,
 
 Todo o projeto pode ser totalmente portado para o sistema operacional LINUX.
-
-//=================================================================================================================
 
 Para rodar o jogo em resoluções de telas diferentes, por favor iniciar o projeto pelo launcher, ele automaticamente
 detectara todas as resoluções de tela suportado por sua maquina.
