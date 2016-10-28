@@ -256,3 +256,25 @@ void BM_Hexagono_adicionar_animacao(BM_HEXAGONO *_alvo) {
 	}
 }
 //==========================================================================
+
+//==========================================================================
+// Click hexagono
+//==========================================================================
+BM_HEXAGONO *BM_Hexagono_click(int _mouseX, int _mouseY) {
+	BM_Campo *campo = BM_Campo_getCampo();
+	BM_HEXAGONO *hexagono = NULL;
+	int i, largura, altura;
+	for (i = 0; i < campo->quantidade; i++) {
+		hexagono = &campo->hexagonos[i];
+		largura = BM_AJUSTE_XW(hexagono->posicaoX) + SPRITES(BM_IMG_HEXAGONO)->ajusteW;
+		altura = BM_AJUSTE_YH(hexagono->posicaoY) + SPRITES(BM_IMG_HEXAGONO)->ajusteH;
+		if (_mouseX >= BM_AJUSTE_XW(hexagono->posicaoX) && _mouseX <= largura &&
+			_mouseY >= BM_AJUSTE_YH(hexagono->posicaoY) && _mouseY <= altura) {
+			break;
+		}
+	}
+	if (i != campo->quantidade)
+		return hexagono;
+	return NULL;
+}
+//==========================================================================

@@ -40,8 +40,7 @@ ALLEGRO_EVENT BM_Eventos_obter_evento() {
 //==========================================================================
 int BM_Eventos_iniciar(ALLEGRO_DISPLAY *_janela)
 {
-	if (BM_Eventos_janela(_janela) == ERRO)
-		return ERRO;
+	if (BM_Eventos_janela(_janela) == ERRO)	return ERRO;
 	BM_Eventos_iniciarListenerEventos();
 	return SUCESSO;
 }
@@ -64,7 +63,7 @@ int BM_Eventos_janela(ALLEGRO_DISPLAY *_janela) {
 // Iniciar variaveis responsaveis por escutar os eventos do jogo
 //==========================================================================
 void BM_Eventos_iniciarListenerEventos() {
-	al_init_timeout(&BM_Loop_timeout, 0.05);
+	al_init_timeout(&BM_Loop_timeout, 0.15);
 	al_register_event_source(BM_Loop_filaEventos, al_get_keyboard_event_source());
 	al_register_event_source(BM_Loop_filaEventos, al_get_mouse_event_source());
 }
@@ -75,7 +74,7 @@ void BM_Eventos_iniciarListenerEventos() {
 //==========================================================================
 int BM_Eventos_processar() {
 	int tem_eventos = al_wait_for_event_until(BM_Loop_filaEventos, &BM_Loop_evento, &BM_Loop_timeout);
-	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)	return FECHAR_JOGO;
+	if (tem_eventos && BM_Loop_evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) return FECHAR_JOGO;
 	BM_Eventos_executarFilaFuncoes();
 	return LOOP;
 }
