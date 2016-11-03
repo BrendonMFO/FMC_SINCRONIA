@@ -2,6 +2,12 @@
 Projeto de jogo em C utilizando ALLEGRO 5
 Brendon Mike Feliciano de Oliveira
 
+Informações das pastas - 
+ALLEGRO - Codigos relacionados a API grafica utilizada
+RECURSOS - Codigos relacionados ao controle e manipulação de recursos graficos ( Imagens, sons, ... )
+LOGICA - Codigos relacionados a logica em si do jogo, como as regras, o jogador, e a inteligência artificial
+FMC - Codigos relacionados ao inicio e loop do jogo
+
 Este trabalho é focado em um jogo de dominação de territorio apartir de um campo, onde cada territorio é um nó em
 um grafo, representado graficamente como um hexagono onde cada um de seus lados representa uma conexão com o hexagono
 conectado. A logica de movimentação do jogador utliza uma busca em largura para verificar se o territorio selecionado
