@@ -42,7 +42,7 @@ int BM_Animacao_iniciar_fila() {
 //==========================================================================
 
 //==========================================================================
-// Adicionar animação na lista 25 / 60
+// Adicionar animação na lista 
 //==========================================================================
 int BM_Animacao_adicionar(BM_SPRITES *_sprite, int _renderW, int _renderH, int _renderX, int _renderY, double _tempo) {
 	BM_ANIMACAO *aux = (BM_ANIMACAO*)malloc(1 * sizeof(BM_ANIMACAO));

@@ -99,6 +99,7 @@ void carregarHexagonos(BM_HEXAGONO *_hexagonos, FILE *_arquivo, int _quantidadeL
 			&_hexagonos[contador].conexoes[4],
 			&_hexagonos[contador].conexoes[5]);
 	}
+	fclose(_arquivo);
 }
 //==========================================================================
 

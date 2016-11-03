@@ -23,13 +23,6 @@ int TUTORIAL = 0;
 //==========================================================================
 
 //==========================================================================
-// Matriz de render dos hexagonos na batalha
-//==========================================================================
-const int BM_BATALHA_JOGADOR[7][2] = { { 230, 122 },{ 405, 229 },{ 406, 436 },
-{ 229, 534 },{ 49, 427 },{ 50, 221 },{ 229, 327 } };
-//==========================================================================
-
-//==========================================================================
 // Prototipos para funções de renders
 //==========================================================================
 void BM_Render_normal(BM_SPRITES *_sprite, int _x, int _y, int _flag);
@@ -86,7 +79,6 @@ void BM_Render_regiao_escalonada(BM_SPRITES *_sprite, RENDER_DADOS_REGIAO, int _
 // Loop de renderização principal
 //==========================================================================
 void BM_Render_principal() {
-	
 	BM_Render_normal(SPRITES(BM_IMG_MAPA_01), 0, 0, 0);
 	BM_Render_campo();
 	BM_Render_player();

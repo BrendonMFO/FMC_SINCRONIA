@@ -139,20 +139,19 @@ void BM_Evento_jogador(void *_parametro) {
 void BM_Evento_alvo(void *_parametro) {
 	ALLEGRO_EVENT aux = BM_Eventos_obter_evento();
 	BM_Campo *campo = BM_Campo_getCampo();
-	BM_HEXAGONO *hexagono, *hexagonoClick;
+	BM_HEXAGONO *hexagonoClick;
 	switch (aux.type) {
 	case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
 		hexagonoClick = BM_Hexagono_click(aux.mouse.x, aux.mouse.y);
 		 if (hexagonoClick != NULL) {
 			 if (hexagonoClick->estado == ADVERSARIO) {
-				 hexagono = &campo->hexagonos[BM_Player_getJogador()->hexagonoAtual];
-				 switch (BM_Hexagono_batalha(hexagono->id, BM_Player_getJogador()->hexagonoAtual, JOGADOR, ADVERSARIO))
+				 switch (BM_Hexagono_batalha(hexagonoClick->id, BM_Player_getJogador()->hexagonoAtual, JOGADOR, ADVERSARIO))
 				 {
 				 case VITORIA_ATAQUE:
 					 BM_Hexagono_marcar_alvos(BM_Player_getJogador()->hexagonoAtual, HEXAGONO_NORMAL);
 					 BM_Hexagono_desmarcar_sincronia(JOGADOR);
 					 hexagonoClick->estado = JOGADOR;
-					 BM_Player_getJogador()->hexagonoAtual = hexagono->id;
+					 BM_Player_getJogador()->hexagonoAtual = hexagonoClick->id;
 					 BM_Player_getJogador()->quantidadeTerritorio++;
 					 BM_Player_getIAPlayer()->quantidadeTerritorio--;
 					 break;

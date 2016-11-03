@@ -14,7 +14,7 @@ typedef void(*BM_EVENTO_FUNCAO)(void*);
 //==========================================================================
 
 //==========================================================================
-// Estrutura de dados das funções que devem ser associadas aos eventoa
+// Estrutura de dados das funções que devem ser associadas aos eventos
 //==========================================================================
 typedef struct BM_EVENTOS_FUNCAO_S {
 	struct BM_EVENTOS_FUNCAO_S *anterior;
